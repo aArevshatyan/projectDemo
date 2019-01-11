@@ -6,7 +6,7 @@ public class Test {
     public static void main(String[] args) throws SQLException {
 
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/northwind",
+                "jdbc:mysql://localhost:3306/test2",
                 "root",
                 "root"
         );
@@ -36,7 +36,7 @@ public class Test {
                     "SELECT  COLUMN_NAME,  CONSTRAINT_NAME,  REFERENCED_TABLE_NAME,  REFERENCED_COLUMN_NAME " +
                             "  FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE " +
                             "  WHERE TABLE_NAME = \'" + resultSet.getString(1) + "\'" +
-                            "and  REFERENCED_TABLE_NAME is not null and  REFERENCED_COLUMN_NAME is not null;";
+                            "and REFERENCED_TABLE_NAME is not null and  REFERENCED_COLUMN_NAME is not null;";
             Statement showFkeysStatement = connection.createStatement();
             ResultSet resultSet2 = showFkeysStatement.executeQuery(showFkeysSql);
             boolean b = true;
