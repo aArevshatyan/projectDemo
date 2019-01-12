@@ -1,11 +1,10 @@
 package am.aca.analyzers;
 
-import am.aca.components.Schema;
-
 import java.sql.SQLException;
+import am.aca.components.Schema;
 
 public interface DDLAnalyzer {
 
-    Schema getSchema() throws SQLException;
+    Schema getSchemaOf(String url) throws SQLException;
 
 }

@@ -1,62 +1,87 @@
 package am.aca.analyzers;
 
-import am.aca.components.Schema;
-
 import java.sql.*;
+import java.util.List;
 
-public class MySQLDDLAnalyzer implements DDLAnalyzer{
+import am.aca.components.*;
+
+public class MySQLDDLAnalyzer implements DDLAnalyzer {
+
+    private Connection connection;
 
     @Override
-    public Schema getSchema() throws SQLException {
-        Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/test2",
-                "root",
-                "root"
+    public Schema getSchemaOf(String url) throws SQLException {
+        String user = "root";
+        String password = "root";
+        this.connection = DriverManager.getConnection(
+                url,
+                user,
+                password
         );
 
+        Schema schema = new Schema();
+        getTablesFromDB(schema.getTables());
+
+        return schema;
+    }
+
+    private void getTablesFromDB(List<Table> tables) throws SQLException {
 
         String showTablesSql = "SHOW TABLES;";
         Statement showTablesStatement = connection.createStatement();
         ResultSet resultSet = showTablesStatement.executeQuery(showTablesSql);
 
         while (resultSet.next()) {
-
-            String tableName = resultSet.getString(1);
-            System.out.println(tableName);
-            //chi stacvum prepStat setStringy chakertova avelacnum tableNamey
-            String showColumnsSql = "SHOW COLUMNS FROM " + tableName + ";";
-            Statement showColumnsStatement = connection.createStatement();
-            ResultSet resultSet1 = showColumnsStatement.executeQuery(showColumnsSql);
-            while (resultSet1.next()) {
-                System.out.print("\t\t" + resultSet1.getString(1));
-                System.out.print("\t\t" + resultSet1.getString(2));
-                System.out.print("\t\t" + resultSet1.getString(3));
-                System.out.print("\t\t" + resultSet1.getString(4));
-                System.out.print("\t\t" + resultSet1.getString(5));
-                System.out.println("\t\t" + resultSet1.getString(6));
-
-            }
-            PreparedStatement showFkeysStatement = connection.prepareStatement(
-                    "SELECT  COLUMN_NAME,  CONSTRAINT_NAME,  REFERENCED_TABLE_NAME,  REFERENCED_COLUMN_NAME " +
-                            "  FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE " +
-                            "  WHERE TABLE_NAME = ? " +
-                            "AND REFERENCED_TABLE_NAME IS NOT NULL AND REFERENCED_COLUMN_NAME IS NOT NULL;"
-            );
-            showFkeysStatement.setString(1, tableName);
-            ResultSet resultSet2 = showFkeysStatement.executeQuery();
-            boolean b = true;
-            while (resultSet2.next()) {
-                if (b) {
-                    System.out.println("FOREIGN KEYs for " + tableName);
-                    b = false;
-                }
-                System.out.print("\t\t" + resultSet2.getString(1));
-                System.out.print("\t\t" + resultSet2.getString(2));
-                System.out.print("\t\t" + resultSet2.getString(3));
-                System.out.println("\t\t" + resultSet2.getString(4));
-            }
-            System.out.println();
+            Table table = new Table(resultSet.getString(1));
+            getColumnsFromDb(table.getName(), table.getColumns());
+            getConstraintsFromDb(table.getName(), table.getConstraints());
+            tables.add(table);
         }
-        return null;
+
+    }
+
+    private void getColumnsFromDb(String tableName, List<Column> columns) throws SQLException {
+        String showColumnsSql = "SHOW COLUMNS FROM " + tableName + ";";
+        Statement showColumnsStatement = connection.createStatement();
+        ResultSet resultSet = showColumnsStatement.executeQuery(showColumnsSql);
+        while (resultSet.next()) {
+
+            columns.add(
+                    new Column(
+                            resultSet.getString(1),
+                            resultSet.getString(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getString(5),
+                            resultSet.getString(6)
+                    )
+            );
+        }
+    }
+
+    private void getConstraintsFromDb(String tableName, List<Constraint> constraints) throws SQLException {
+        PreparedStatement showFkeysStatement = connection.prepareStatement(
+                "SELECT  TABLE_NAME, COLUMN_NAME,  CONSTRAINT_NAME,  REFERENCED_TABLE_NAME,  REFERENCED_COLUMN_NAME " +
+                        "  FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE " +
+                        "  WHERE TABLE_NAME = ? " +
+                        "AND REFERENCED_TABLE_NAME IS NOT NULL AND REFERENCED_COLUMN_NAME IS NOT NULL;"
+        );
+        showFkeysStatement.setString(1, tableName);
+        ResultSet resultSet = showFkeysStatement.executeQuery();
+        while (resultSet.next()) {
+            constraints.add(
+                    new Constraint(
+                            resultSet.getString(1),
+                            resultSet.getString(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getString(5)
+                    )
+            );
+        }
     }
 }
+
+
+
+

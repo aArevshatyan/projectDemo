@@ -2,9 +2,9 @@ package am.aca.components;
 
 public class Column {
     private String field;
-    private String type;
+    private String type; // enums for each db type?
     private String nullable;
-    private String key;
+    private String key; // PRI UNI MUL empty
     private String defaultValue;
     private String extra;
 
