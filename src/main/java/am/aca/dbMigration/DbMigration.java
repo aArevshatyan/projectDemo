@@ -16,11 +16,11 @@ public class DbMigration {
 
     public static void main(String[] args) throws SQLException {
         String jdbcUrl = "jdbc:mysql://localhost:3306/test2";
-        //String jdbcUrl = "jdbc:postgresql://localhost:5432/test2";
+//        String jdbcUrl = "jdbc:postgresql://localhost:5432/test2";
         Schema schema = DDLAnalyzerFactory
                 .getAnalyzer(JdbcUrlHelper
                         .getDbType(jdbcUrl))
-                .getSchemaOf("jdbc:mysql://localhost:3306/test2");
+                .getSchemaOf(jdbcUrl);
         schema
                 .getTables()
                 .forEach(x -> {
