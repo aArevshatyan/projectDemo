@@ -1,5 +1,6 @@
 CREATE TABLE product (
-  category INT NOT NULL, id INT NOT NULL,
+  category INT NOT NULL,
+  id INT NOT NULL,
   price DECIMAL,
   PRIMARY KEY(category, id)
 )   ENGINE=INNODB;
