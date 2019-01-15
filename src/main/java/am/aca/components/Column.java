@@ -41,4 +41,11 @@ public class Column {
     public String getExtra() {
         return extra;
     }
+
+    @Override
+    public String toString() {
+        return "Column{" +
+                "field='" + field + '\'' +
+                '}';
+    }
 }

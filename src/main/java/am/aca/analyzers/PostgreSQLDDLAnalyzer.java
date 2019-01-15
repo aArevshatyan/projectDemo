@@ -10,7 +10,7 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
     private Connection connection;
 
     @Override
-    public Schema getSchemaOf(String url) throws SQLException {
+    public Schema<PostgreSQLTable> getSchemaOf(String url) throws SQLException {
         String user = "postgres";
         String password = "root";
         this.connection = DriverManager.getConnection(
@@ -19,23 +19,23 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
                 password
         );
 
-        Schema schema = new Schema();
+        Schema<PostgreSQLTable> schema = new Schema<>();
         getTablesFromDB(schema.getTables());
 
         return schema;
 
     }
 
-    private void getTablesFromDB(List<Table> tables) throws SQLException {
+    private void getTablesFromDB(List<PostgreSQLTable> tables) throws SQLException {
 
         String showTablesSql = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'";
         Statement showTablesStatement = connection.createStatement();
         ResultSet resultSet = showTablesStatement.executeQuery(showTablesSql);
 
         while (resultSet.next()) {
-            Table table = new Table(resultSet.getString(1));
-            getColumnsFromDb(table.getName(), table.getColumns());
-            getConstraintsFromDb(table.getName(), table.getConstraints());
+            PostgreSQLTable table = new PostgreSQLTable(resultSet.getString(1));
+            getColumnsFromDb(table.getTableName(), table.getColumns());
+            getConstraintsFromDb(table.getTableName(), table.getConstraints());
             tables.add(table);
         }
 
@@ -44,9 +44,9 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
     private void getColumnsFromDb(String tableName, List<Column> columns) throws SQLException {
         PreparedStatement showColumnsStatement = connection.prepareStatement(
                 "SELECT column_name, data_type, is_nullable, is_identity, column_default, is_generated " +
-                " FROM information_schema.columns " +
-                " WHERE table_schema = 'public' " +
-                " AND table_name   = ?;");
+                        " FROM information_schema.columns " +
+                        " WHERE table_schema = 'public' " +
+                        " AND table_name   = ?;");
         showColumnsStatement.setString(1, tableName);
         ResultSet resultSet = showColumnsStatement.executeQuery();
         while (resultSet.next()) {
@@ -73,9 +73,7 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
                         " JOIN information_schema.constraint_column_usage AS ccu" +
                         " ON ccu.constraint_name = tc.constraint_name" +
                         " AND ccu.table_schema = tc.table_schema" +
-                        " WHERE tc.constraint_type = 'FOREIGN KEY' AND tc.table_name= ? ;");
-
-
+                        " WHERE tc.constraint_type = 'FOREIGN KEY' AND  tc.table_name= ? ;");
 
         showFkeysStatement.setString(1, tableName);
         ResultSet resultSet = showFkeysStatement.executeQuery();

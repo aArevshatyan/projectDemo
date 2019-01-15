@@ -3,6 +3,18 @@ package am.aca.components;
 public class Constraint {
 
     private String table;
+
+    @Override
+    public String toString() {
+        return "Constraint{" +
+                "table='" + table + '\'' +
+                ", column='" + column + '\'' +
+                ", constraint='" + constraint + '\'' +
+                ", referencedTable='" + referencedTable + '\'' +
+                ", referencedColumn='" + referencedColumn + '\'' +
+                '}';
+    }
+
     private String column;
     private String constraint;
     private String referencedTable;

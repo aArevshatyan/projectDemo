@@ -1,17 +1,17 @@
 package am.aca.components;
 
-import java.util.List;
-import java.util.ArrayList;
 
-public class Schema {
+import java.util.*;
 
-    private List<Table> tables;
+public class Schema<T> {
+
+    private List<T> tables;
 
     public Schema() {
         this.tables = new ArrayList<>();
     }
 
-    public List<Table> getTables() {
+    public List<T> getTables() {
         return tables;
     }
 
