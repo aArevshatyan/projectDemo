@@ -1,9 +1,11 @@
 package am.aca.analyzers;
 
 import java.sql.*;
-import java.util.List;
 
-import am.aca.components.*;
+import am.aca.components.Schema;
+import am.aca.components.tables.MySQLTable;
+import am.aca.components.columns.MySQLColumn;
+import am.aca.components.constraints.MySQLConstraint;
 
 public class MySQLDDLAnalyzer implements DDLAnalyzer {
 
@@ -20,65 +22,77 @@ public class MySQLDDLAnalyzer implements DDLAnalyzer {
         );
 
         Schema<MySQLTable> schema = new Schema<>();
-        getTablesFromDB(schema.getTables());
+        getTablesFromDB(schema);
 
         return schema;
     }
 
-    private void getTablesFromDB(List<MySQLTable> tables) throws SQLException {
+    private void getTablesFromDB(Schema<MySQLTable> schema) throws SQLException {
 
+        //todo schemayi anuny poxancel helperov
         String showTablesSql =
-                " SELECT TABLE_NAME " +
-                " FROM INFORMATION_SCHEMA.TABLES" +
-                " WHERE TABLE_SCHEMA = 'test2'";
+                " SELECT TABLE_NAME, TABLE_TYPE " +
+                        " FROM INFORMATION_SCHEMA.TABLES" +
+                        " WHERE TABLE_SCHEMA = 'test2'";
         Statement showTablesStatement = connection.createStatement();
         ResultSet resultSet = showTablesStatement.executeQuery(showTablesSql);
 
         while (resultSet.next()) {
-            MySQLTable table = new MySQLTable(resultSet.getString(1));
-            getColumnsFromDb(table.getTableName(), table.getColumns());
-            getConstraintsFromDb(table.getTableName(), table.getConstraints());
-            tables.add(table);
+            MySQLTable table = new MySQLTable(resultSet.getString(1), resultSet.getString(2));
+            getColumnsFromDb(table);
+            getConstraintsFromDb(table);
+            schema.addTable(table);
         }
 
     }
 
-    private void getColumnsFromDb(String tableName, List<Column> columns) throws SQLException {
-        String showColumnsSql = "SHOW COLUMNS FROM " + tableName + ";";
-        Statement showColumnsStatement = connection.createStatement();
-        ResultSet resultSet = showColumnsStatement.executeQuery(showColumnsSql);
+    private void getColumnsFromDb(MySQLTable table) throws SQLException {
+
+        PreparedStatement showColumnsStatement = connection.prepareStatement(
+                "SELECT COLUMN_NAME, ORDINAL_POSITION, COLUMN_DEFAULT, " +
+                        "IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, CHARACTER_OCTET_LENGTH, " +
+                        "NUMERIC_PRECISION, NUMERIC_SCALE, COLUMN_TYPE, COLUMN_KEY " +
+                        "FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? ;");
+        showColumnsStatement.setString(1, table.getName());
+        ResultSet resultSet = showColumnsStatement.executeQuery();
         while (resultSet.next()) {
 
-            columns.add(
-                    new Column(
+            table.addColumn(
+                    new MySQLColumn(
+                            resultSet.getString(1),
+                            resultSet.getInt(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getString(5),
+                            resultSet.getInt(6),
+                            resultSet.getInt(7),
+                            resultSet.getInt(8),
+                            resultSet.getInt(9),
+                            resultSet.getString(10),
+                            resultSet.getString(11)
+                    )
+            );
+        }
+    }
+
+    private void getConstraintsFromDb(MySQLTable table) throws SQLException {
+        PreparedStatement showFkeysStatement = connection.prepareStatement(
+                "SELECT  K.CONSTRAINT_NAME, C.CONSTRAINT_TYPE, K.TABLE_NAME, K.COLUMN_NAME,   K.REFERENCED_TABLE_NAME,  K.REFERENCED_COLUMN_NAME " +
+                        " FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS  K , INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS C" +
+                        " WHERE  K.TABLE_NAME = C.TABLE_NAME AND K.CONSTRAINT_NAME = C.CONSTRAINT_NAME AND K.TABLE_NAME = ?;"
+
+        );
+        showFkeysStatement.setString(1, table.getName());
+        ResultSet resultSet = showFkeysStatement.executeQuery();
+        while (resultSet.next()) {
+            table.addConstraint(
+                    new MySQLConstraint(
                             resultSet.getString(1),
                             resultSet.getString(2),
                             resultSet.getString(3),
                             resultSet.getString(4),
                             resultSet.getString(5),
                             resultSet.getString(6)
-                    )
-            );
-        }
-    }
-
-    private void getConstraintsFromDb(String tableName, List<Constraint> constraints) throws SQLException {
-        PreparedStatement showFkeysStatement = connection.prepareStatement(
-                "SELECT  TABLE_NAME, COLUMN_NAME,  CONSTRAINT_NAME,  REFERENCED_TABLE_NAME,  REFERENCED_COLUMN_NAME " +
-                        " FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE " +
-                        " WHERE TABLE_NAME = ? " +
-                        " AND REFERENCED_TABLE_NAME IS NOT NULL AND REFERENCED_COLUMN_NAME IS NOT NULL;"
-        );
-        showFkeysStatement.setString(1, tableName);
-        ResultSet resultSet = showFkeysStatement.executeQuery();
-        while (resultSet.next()) {
-            constraints.add(
-                    new Constraint(
-                            resultSet.getString(1),
-                            resultSet.getString(2),
-                            resultSet.getString(3),
-                            resultSet.getString(4),
-                            resultSet.getString(5)
                     )
             );
         }

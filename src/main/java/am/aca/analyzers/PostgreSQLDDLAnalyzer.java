@@ -1,9 +1,11 @@
 package am.aca.analyzers;
 
 import java.sql.*;
-import java.util.List;
 
-import am.aca.components.*;
+import am.aca.components.Schema;
+import am.aca.components.tables.PostgreSQLTable;
+import am.aca.components.columns.PostgreSQLColumn;
+import am.aca.components.constraints.PostgreSQLConstraint;
 
 public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
 
@@ -20,71 +22,78 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
         );
 
         Schema<PostgreSQLTable> schema = new Schema<>();
-        getTablesFromDB(schema.getTables());
+        getTablesFromDB(schema);
 
         return schema;
 
     }
 
-    private void getTablesFromDB(List<PostgreSQLTable> tables) throws SQLException {
+    private void getTablesFromDB(Schema<PostgreSQLTable> schema) throws SQLException {
 
-        String showTablesSql = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'";
+        String showTablesSql = "SELECT TABLE_NAME, TABLE_TYPE FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'public'";
         Statement showTablesStatement = connection.createStatement();
         ResultSet resultSet = showTablesStatement.executeQuery(showTablesSql);
 
         while (resultSet.next()) {
-            PostgreSQLTable table = new PostgreSQLTable(resultSet.getString(1));
-            getColumnsFromDb(table.getTableName(), table.getColumns());
-            getConstraintsFromDb(table.getTableName(), table.getConstraints());
-            tables.add(table);
+            PostgreSQLTable table = new PostgreSQLTable(resultSet.getString(1), resultSet.getString(2));
+            getColumnsFromDb(table);
+            getConstraintsFromDb(table);
+            schema.addTable(table);
         }
 
     }
 
-    private void getColumnsFromDb(String tableName, List<Column> columns) throws SQLException {
+    private void getColumnsFromDb(PostgreSQLTable table) throws SQLException {
+
         PreparedStatement showColumnsStatement = connection.prepareStatement(
-                "SELECT column_name, data_type, is_nullable, is_identity, column_default, is_generated " +
-                        " FROM information_schema.columns " +
-                        " WHERE table_schema = 'public' " +
-                        " AND table_name   = ?;");
-        showColumnsStatement.setString(1, tableName);
+                "SELECT COLUMN_NAME, ORDINAL_POSITION, COLUMN_DEFAULT, " +
+                        "IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, " +
+                        "CHARACTER_OCTET_LENGTH, NUMERIC_PRECISION, NUMERIC_SCALE  " +
+                        " FROM INFORMATION_SCHEMA.COLUMNS " +
+                        " WHERE TABLE_SCHEMA = 'public' " +
+                        " AND TABLE_NAME   = ?;");
+        showColumnsStatement.setString(1, table.getName());
         ResultSet resultSet = showColumnsStatement.executeQuery();
         while (resultSet.next()) {
+            table.addColumn(
+                    new PostgreSQLColumn(
+                            resultSet.getString(1),
+                            resultSet.getInt(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getString(5),
+                            resultSet.getInt(6),
+                            resultSet.getInt(7),
+                            resultSet.getInt(8),
+                            resultSet.getInt(9)
+                    )
+            );
+        }
+    }
 
-            columns.add(
-                    new Column(
+    private void getConstraintsFromDb(PostgreSQLTable table) throws SQLException {
+        PreparedStatement showFkeysStatement = connection.prepareStatement(
+                "SELECT  TC.CONSTRAINT_NAME, TC.CONSTRAINT_TYPE, TC.TABLE_NAME, KCU.COLUMN_NAME,  CCU.TABLE_NAME, CCU.COLUMN_NAME " +
+                        " FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TC " +
+                        " JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KCU" +
+                        " ON TC.CONSTRAINT_NAME = KCU.CONSTRAINT_NAME" +
+                        " AND TC.TABLE_SCHEMA = KCU.TABLE_SCHEMA" +
+                        " JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE AS CCU" +
+                        " ON CCU.CONSTRAINT_NAME = TC.CONSTRAINT_NAME" +
+                        " AND CCU.TABLE_SCHEMA = TC.TABLE_SCHEMA" +
+                        " WHERE TC.TABLE_NAME = ? ;");
+
+        showFkeysStatement.setString(1, table.getName());
+        ResultSet resultSet = showFkeysStatement.executeQuery();
+        while (resultSet.next()) {
+            table.addConstraint(
+                    new PostgreSQLConstraint(
                             resultSet.getString(1),
                             resultSet.getString(2),
                             resultSet.getString(3),
                             resultSet.getString(4),
                             resultSet.getString(5),
-                            resultSet.getString(6))
-            );
-        }
-    }
-
-    private void getConstraintsFromDb(String tableName, List<Constraint> constraints) throws SQLException {
-        PreparedStatement showFkeysStatement = connection.prepareStatement(
-                "SELECT  tc.table_name, kcu.column_name, tc.constraint_name, ccu.table_name, ccu.column_name " +
-                        " FROM information_schema.table_constraints AS tc " +
-                        " JOIN information_schema.key_column_usage AS kcu" +
-                        " ON tc.constraint_name = kcu.constraint_name" +
-                        " AND tc.table_schema = kcu.table_schema" +
-                        " JOIN information_schema.constraint_column_usage AS ccu" +
-                        " ON ccu.constraint_name = tc.constraint_name" +
-                        " AND ccu.table_schema = tc.table_schema" +
-                        " WHERE tc.constraint_type = 'FOREIGN KEY' AND  tc.table_name= ? ;");
-
-        showFkeysStatement.setString(1, tableName);
-        ResultSet resultSet = showFkeysStatement.executeQuery();
-        while (resultSet.next()) {
-            constraints.add(
-                    new Constraint(
-                            resultSet.getString(1),
-                            resultSet.getString(2),
-                            resultSet.getString(3),
-                            resultSet.getString(4),
-                            resultSet.getString(5)
+                            resultSet.getString(6)
                     )
             );
         }

@@ -12,7 +12,15 @@ public class Schema<T> {
     }
 
     public List<T> getTables() {
-        return tables;
+        return new ArrayList<>(tables);
+    }
+
+    public void setTables(List<T> tables) {
+        this.tables = tables;
+    }
+
+    public void addTable(T table){
+        this.tables.add(table);
     }
 
     //private List<Procedure> procedures;

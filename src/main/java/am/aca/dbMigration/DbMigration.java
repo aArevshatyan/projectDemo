@@ -1,11 +1,11 @@
 package am.aca.dbMigration;
 
-import am.aca.components.Schema;
-import am.aca.components.MySQLTable;
-import am.aca.components.PostgreSQLTable;
-import am.aca.analyzers.DDLAnalyzerFactory;
-
 import java.sql.SQLException;
+
+import am.aca.components.Schema;
+import am.aca.components.tables.*;
+import am.aca.converters.ConverterFactory;
+import am.aca.analyzers.DDLAnalyzerFactory;
 
 public class DbMigration {
 
@@ -19,15 +19,22 @@ public class DbMigration {
     public static void main(String[] args) throws SQLException {
         String jdbcMySQLUrl = "jdbc:mysql://localhost:3306/test2";
         String jdbcPostgreSqlUrl = "jdbc:postgresql://localhost:5432/test2";
-        Schema mySQLSchema = DDLAnalyzerFactory
-                .getAnalyzer(JdbcUrlHelper
-                        .getDbType(jdbcMySQLUrl))
-                .getSchemaOf(jdbcMySQLUrl);
 
+
+        String mySQLType = JdbcUrlHelper.getDbType(jdbcMySQLUrl);
+        String postgreSQLType = JdbcUrlHelper.getDbType(jdbcPostgreSqlUrl);
+
+        Schema mySQLSchema = DDLAnalyzerFactory
+                .getAnalyzer(mySQLType)
+                .getSchemaOf(jdbcMySQLUrl);
         Schema postgreSQLSchema = DDLAnalyzerFactory
-                .getAnalyzer(JdbcUrlHelper
-                        .getDbType(jdbcPostgreSqlUrl))
+                .getAnalyzer(postgreSQLType)
                 .getSchemaOf(jdbcPostgreSqlUrl);
+
+
+        Schema<PostgreSQLTable> convertedMyToPostgres = ConverterFactory.getConverter(mySQLType, postgreSQLType).convert(mySQLSchema);
+        Schema<MySQLTable> convertedPostgresToMy = ConverterFactory.getConverter(postgreSQLType, mySQLType).convert(postgreSQLSchema);
+
 
         for (Object o : mySQLSchema.getTables()) {
             System.out.println(o);
@@ -41,7 +48,7 @@ public class DbMigration {
 
         System.out.println("-------------");
 
-        for (Object o : postgreSQLSchema.getTables()) {
+        for (Object o : convertedMyToPostgres.getTables()) {
             System.out.println(o);
             for (Object o1 : ((PostgreSQLTable) o).getColumns()) {
                 System.out.println("\t" + o1);
@@ -50,6 +57,7 @@ public class DbMigration {
                 System.out.println("\t\t" + o1);
             }
         }
+
 
     }
 
