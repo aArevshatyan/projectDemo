@@ -4,6 +4,7 @@ import am.aca.components.Schema;
 import am.aca.components.tables.*;
 import am.aca.components.columns.*;
 import am.aca.components.constraints.*;
+import am.aca.components.utils.Type;
 
 public class PostgreSQLToMySQL implements Converter {
     @Override
@@ -11,15 +12,14 @@ public class PostgreSQLToMySQL implements Converter {
         Schema<PostgreSQLTable> schemaFrom = schema;
         Schema<MySQLTable> schemaTo = new Schema<>();
 
-        //todo numeric typeri chapery voroshel
         for (PostgreSQLTable tablefrom : schemaFrom.getTables()) {
             MySQLTable tableTo = new MySQLTable(tablefrom.getName(), tablefrom.getType());
             for (PostgreSQLColumn columnFrom : tablefrom.getColumns()) {
                 MySQLColumn columnTo = new MySQLColumn(
                         columnFrom.getName(), columnFrom.getOrdinalPosition(), columnFrom.getDefaultValue(),
-                        columnFrom.getIsNullable(), columnFrom.getDataType(), columnFrom.getCharacterMaximumLength(),
+                        columnFrom.getIsNullable(), Type.getDataType("postgresql","mysql",columnFrom.getDataType().toUpperCase()), columnFrom.getCharacterMaximumLength(),
                         columnFrom.getCharacterOctetLength(), columnFrom.getNumericPrecision(), columnFrom.getNumericScale(),
-                        columnFrom.getDataType() + "(" + columnFrom.getNumericPrecision() + ")", null
+                        null, null
                 );
                 tableTo.addColumn(columnTo);
             }

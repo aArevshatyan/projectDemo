@@ -124,7 +124,7 @@ public class MySQLColumn {
     public String toString() {
         return "MySQLColumn{" +
                 "name='" + name + '\'' +
-                ", type=" + type +
+                ", datatype =" + dataType + "(" + numericPrecision + ")" +
                 '}';
     }
 }

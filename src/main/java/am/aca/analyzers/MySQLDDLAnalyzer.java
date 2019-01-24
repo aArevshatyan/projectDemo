@@ -6,6 +6,7 @@ import am.aca.components.Schema;
 import am.aca.components.tables.MySQLTable;
 import am.aca.components.columns.MySQLColumn;
 import am.aca.components.constraints.MySQLConstraint;
+import am.aca.components.utils.JdbcUrlHelper;
 
 public class MySQLDDLAnalyzer implements DDLAnalyzer {
 
@@ -22,20 +23,21 @@ public class MySQLDDLAnalyzer implements DDLAnalyzer {
         );
 
         Schema<MySQLTable> schema = new Schema<>();
-        getTablesFromDB(schema);
+        getTablesFromDB(url, schema);
 
         return schema;
     }
 
-    private void getTablesFromDB(Schema<MySQLTable> schema) throws SQLException {
+    private void getTablesFromDB(String url, Schema<MySQLTable> schema) throws SQLException {
 
-        //todo schemayi anuny poxancel helperov
-        String showTablesSql =
+        String dbName = JdbcUrlHelper.getDbName(url);
+
+        PreparedStatement showTablesStatement = connection.prepareStatement(
                 " SELECT TABLE_NAME, TABLE_TYPE " +
-                        " FROM INFORMATION_SCHEMA.TABLES" +
-                        " WHERE TABLE_SCHEMA = 'test2'";
-        Statement showTablesStatement = connection.createStatement();
-        ResultSet resultSet = showTablesStatement.executeQuery(showTablesSql);
+                " FROM INFORMATION_SCHEMA.TABLES" +
+                " WHERE TABLE_SCHEMA = ?");
+        showTablesStatement.setString(1, dbName);
+        ResultSet resultSet = showTablesStatement.executeQuery();
 
         while (resultSet.next()) {
             MySQLTable table = new MySQLTable(resultSet.getString(1), resultSet.getString(2));

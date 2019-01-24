@@ -13,7 +13,7 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
 
     @Override
     public Schema<PostgreSQLTable> getSchemaOf(String url) throws SQLException {
-        String user = "postgres";
+        String user = "root";
         String password = "root";
         this.connection = DriverManager.getConnection(
                 url,
@@ -30,7 +30,10 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
 
     private void getTablesFromDB(Schema<PostgreSQLTable> schema) throws SQLException {
 
-        String showTablesSql = "SELECT TABLE_NAME, TABLE_TYPE FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'public'";
+        String showTablesSql =
+                "SELECT TABLE_NAME, TABLE_TYPE " +
+                        "FROM INFORMATION_SCHEMA.TABLES " +
+                        "WHERE TABLE_SCHEMA = 'public'";
         Statement showTablesStatement = connection.createStatement();
         ResultSet resultSet = showTablesStatement.executeQuery(showTablesSql);
 
