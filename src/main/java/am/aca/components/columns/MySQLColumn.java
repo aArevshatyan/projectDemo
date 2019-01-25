@@ -124,7 +124,13 @@ public class MySQLColumn {
     public String toString() {
         return "MySQLColumn{" +
                 "name='" + name + '\'' +
-                ", datatype =" + dataType + "(" + numericPrecision + ")" +
-                '}';
+                ", datatype =" + dataType +
+                ((characterMaximumLength != 0)? ("(" + characterMaximumLength + "") : "") +
+                ((numericPrecision != 0)? ("(" + numericPrecision + "") : "") +
+                ((numericScale != 0)? ("),(" + numericScale+ ")") : ")") +
+                "}";
     }
 }
+/* private int characterMaximumLength;
+    private int numericPrecision;
+    private int numericScale;*/

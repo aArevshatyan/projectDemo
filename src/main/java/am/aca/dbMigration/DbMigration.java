@@ -11,6 +11,13 @@ import am.aca.components.utils.JdbcUrlHelper;
 public class DbMigration {
 
 
+    /*Todo
+            genericacnel
+            data lcnel
+            sqlnery generacnel
+            karch asac verjnakan tesqi berel minchev batch sqly
+     */
+
     public static void main(String[] args) throws SQLException {
         String jdbcMySQLUrl = "jdbc:mysql://aca-db.duckdns.org:3306/do_not_touch";
         String jdbcPostgreSqlUrl = "jdbc:postgresql://aca-db.duckdns.org:5432/postgres";
@@ -30,7 +37,7 @@ public class DbMigration {
         Schema<PostgreSQLTable> convertedMyToPostgres = ConverterFactory.getConverter(mySQLType, postgreSQLType).convert(mySQLSchema);
         Schema<MySQLTable> convertedPostgresToMy = ConverterFactory.getConverter(postgreSQLType, mySQLType).convert(postgreSQLSchema);
 
-        for (Object o : convertedPostgresToMy.getTables()) {
+        for (Object o : mySQLSchema.getTables()) {
             System.out.println(o);
             for (Object o1 : ((MySQLTable) o).getColumns()) {
                 System.out.println("\t" + o1);
@@ -42,7 +49,7 @@ public class DbMigration {
 
         System.out.println("-------------");
 
-        for (Object o : postgreSQLSchema.getTables()) {
+        for (Object o : convertedMyToPostgres.getTables()) {
             System.out.println(o);
             for (Object o1 : ((PostgreSQLTable) o).getColumns()) {
                 System.out.println("\t" + o1);
@@ -51,7 +58,6 @@ public class DbMigration {
                 System.out.println("\t\t" + o1);
             }
         }
-
 
     }
 

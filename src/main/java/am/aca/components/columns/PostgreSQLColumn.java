@@ -25,6 +25,8 @@ public class PostgreSQLColumn {
         this.characterOctetLength = characterOctetLength;
         this.numericPrecision = numericPrecision;
         this.numericScale = numericScale;
+
+
     }
 
     public String getName() {
@@ -103,7 +105,10 @@ public class PostgreSQLColumn {
     public String toString() {
         return "PostgreSQLColumn{" +
                 "name='" + name + '\'' +
-                ", type=" + dataType + "(" + numericPrecision + ")" +
-                '}';
+                ", datatype =" + dataType +
+                ((characterMaximumLength != 0)? ("(" + characterMaximumLength + "") : "") +
+                ((numericPrecision != 0)? ("(" + numericPrecision + "") : "") +
+                ((numericScale != 0)? ("),(" + numericScale+ ")") : ")") +
+                "}";
     }
 }

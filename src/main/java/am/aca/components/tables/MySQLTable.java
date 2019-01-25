@@ -23,6 +23,13 @@ public class MySQLTable {
     }
 
 
+    public MySQLConstraint getConstraintByName (String name){
+        for (MySQLConstraint constraint : this.constraints) {
+            if(constraint.getName().equals(name)) return constraint;
+        }
+        return null;
+    }
+
     public void addColumn(MySQLColumn column){
         this.columns.add(column);
     }

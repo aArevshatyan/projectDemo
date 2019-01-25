@@ -6,10 +6,9 @@ import am.aca.components.columns.*;
 import am.aca.components.constraints.*;
 import am.aca.components.utils.Type;
 
-public class MySQLToPostgreSql implements Converter {
+public class MySQLToPostgreSql implements Converter<MySQLTable, PostgreSQLTable> {
     @Override
-    public Schema<PostgreSQLTable> convert(Schema schema) {
-        Schema<MySQLTable> schemaFrom = schema;
+    public Schema<PostgreSQLTable> convert(Schema<MySQLTable> schemaFrom) {
         Schema<PostgreSQLTable> schemaTo = new Schema<>();
 
         for (MySQLTable tablefrom : schemaFrom.getTables()) {
