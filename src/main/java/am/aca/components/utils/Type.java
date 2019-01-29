@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public enum Type {
 
     INT("INT", "INT"),
-    INTEGER("INTEGER", "SMALLINT"),
     SMALLINT("SMALLINT", "SMALLINT"),
+    INTEGER("INTEGER", "INT"),
     BIGINT("BIGINT", "BIGINT"),
     AUTOINCREMENT_INT("SERIAL", "INT"),
     AUTOINCREMENT_SMALLINT("SMALLSERIAL", "SMALLINT"),

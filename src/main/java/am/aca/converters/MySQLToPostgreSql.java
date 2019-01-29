@@ -3,8 +3,8 @@ package am.aca.converters;
 import am.aca.components.Schema;
 import am.aca.components.tables.*;
 import am.aca.components.columns.*;
-import am.aca.components.constraints.*;
 import am.aca.components.utils.Type;
+import am.aca.components.constraints.*;
 
 public class MySQLToPostgreSql implements Converter<MySQLTable, PostgreSQLTable> {
     @Override
@@ -13,10 +13,11 @@ public class MySQLToPostgreSql implements Converter<MySQLTable, PostgreSQLTable>
 
         for (MySQLTable tablefrom : schemaFrom.getTables()) {
             PostgreSQLTable tableTo = new PostgreSQLTable(tablefrom.getName(), tablefrom.getType());
+            tableTo.setEnabled(tablefrom.isEnabled());
             for (MySQLColumn columnFrom : tablefrom.getColumns()) {
                 PostgreSQLColumn columnTo = new PostgreSQLColumn(
                         columnFrom.getName(), columnFrom.getOrdinalPosition(), columnFrom.getDefaultValue(),
-                        columnFrom.getIsNullable(), Type.getDataType("mysql","postgresql",columnFrom.getDataType().toUpperCase()), columnFrom.getCharacterMaximumLength(),
+                        columnFrom.getIsNullable(), Type.getDataType("mysql", "postgresql", columnFrom.getDataType().toUpperCase()), columnFrom.getCharacterMaximumLength(),
                         columnFrom.getCharacterOctetLength(), columnFrom.getNumericPrecision(), columnFrom.getNumericScale()
                 );
                 tableTo.addColumn(columnTo);

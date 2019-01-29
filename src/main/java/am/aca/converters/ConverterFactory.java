@@ -7,15 +7,19 @@ public class ConverterFactory {
         switch (from) {
             case "postgresql": {
                 switch (to) {
-                    case "mysql": return new PostgreSQLToMySQL();
-                    default: throw  new UnsupportedOperationException("Unsupported RDBMS");
+                    case "mysql":
+                        return new PostgreSQLToMySQL();
+                    default:
+                        throw new UnsupportedOperationException("Unsupported RDBMS");
                 }
             }
 
             case "mysql": {
                 switch (to) {
-                    case "postgresql": return new MySQLToPostgreSql();
-                    default: throw  new UnsupportedOperationException("Unsupported RDBMS");
+                    case "postgresql":
+                        return new MySQLToPostgreSql();
+                    default:
+                        throw new UnsupportedOperationException("Unsupported RDBMS");
                 }
             }
 

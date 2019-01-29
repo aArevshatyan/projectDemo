@@ -1,22 +1,16 @@
 package am.aca.dbMigration;
 
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import am.aca.components.Schema;
 import am.aca.components.tables.*;
+import am.aca.generators.GeneratorFactory;
 import am.aca.converters.ConverterFactory;
 import am.aca.analyzers.DDLAnalyzerFactory;
 import am.aca.components.utils.JdbcUrlHelper;
 
 public class DbMigration {
-
-
-    /*Todo
-            genericacnel
-            data lcnel
-            sqlnery generacnel
-            karch asac verjnakan tesqi berel minchev batch sqly
-     */
 
     public static void main(String[] args) throws SQLException {
         String jdbcMySQLUrl = "jdbc:mysql://aca-db.duckdns.org:3306/do_not_touch";
@@ -33,33 +27,56 @@ public class DbMigration {
                 .getAnalyzer(postgreSQLType)
                 .getSchemaOf(jdbcPostgreSqlUrl);
 
+        Schema mySQLSchemaAfterSelected = userSelectedTables(mySQLSchema, mySQLType);
+        Schema postgreSQLSchemaAfterSelected = userSelectedTables(postgreSQLSchema, postgreSQLType);
 
-        Schema<PostgreSQLTable> convertedMyToPostgres = ConverterFactory.getConverter(mySQLType, postgreSQLType).convert(mySQLSchema);
-        Schema<MySQLTable> convertedPostgresToMy = ConverterFactory.getConverter(postgreSQLType, mySQLType).convert(postgreSQLSchema);
+        Schema convertedMyToPostgres = ConverterFactory
+                .getConverter(mySQLType, postgreSQLType)
+                .convert(mySQLSchemaAfterSelected);
+        Schema convertedPostgresToMy = ConverterFactory
+                .getConverter(postgreSQLType, mySQLType)
+                .convert(postgreSQLSchemaAfterSelected);
 
-        for (Object o : mySQLSchema.getTables()) {
-            System.out.println(o);
-            for (Object o1 : ((MySQLTable) o).getColumns()) {
-                System.out.println("\t" + o1);
-            }
-            for (Object o1 : ((MySQLTable) o).getConstraints()) {
-                System.out.println("\t\t" + o1);
-            }
-        }
-
-        System.out.println("-------------");
-
-        for (Object o : convertedMyToPostgres.getTables()) {
-            System.out.println(o);
-            for (Object o1 : ((PostgreSQLTable) o).getColumns()) {
-                System.out.println("\t" + o1);
-            }
-            for (Object o1 : ((PostgreSQLTable) o).getConstraints()) {
-                System.out.println("\t\t" + o1);
-            }
-        }
-
+        GeneratorFactory
+                .getGenerator(postgreSQLType)
+                .generateSQLOf(convertedMyToPostgres);
     }
 
+    private static <T> Schema<T> userSelectedTables(Schema<T> schema, String dbType) {
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Select table index for migrating: ");
+        String indexes;
+        int index = 0;
+
+        switch (dbType) {
+            case "mysql":
+                for (T table : schema.getTables()) {
+                    System.out.println("\t" + index++ + " " + ((MySQLTable) table).getName());
+                }
+                indexes = sc.nextLine();
+                indexes = indexes.replaceAll(" ", "");
+                for (int i = 0; i < indexes.length(); i++) {
+                    int indexx = Character.getNumericValue(indexes.charAt(i));
+                    Object mySQLTable = schema.getTables().get(indexx);
+                    ((MySQLTable) mySQLTable).setEnabled(true);
+                }
+                return schema;
+            case "postgresql":
+                for (T table : schema.getTables()) {
+                    System.out.println("\t" + index++ + " " + ((PostgreSQLTable) table).getName());
+                }
+                indexes = sc.nextLine();
+                indexes = indexes.replaceAll(" ", "");
+                for (int i = 0; i < indexes.length(); i++) {
+                    int indexx = Character.getNumericValue(indexes.charAt(i));
+                    Object postgreSQLTable = schema.getTables().get(indexx);
+                    ((PostgreSQLTable) postgreSQLTable).setEnabled(true);
+                }
+                return schema;
+            default:
+                return null;
+        }
+    }
 }
 

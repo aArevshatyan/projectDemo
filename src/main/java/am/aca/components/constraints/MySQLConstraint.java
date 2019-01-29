@@ -1,5 +1,7 @@
 package am.aca.components.constraints;
 
+import java.util.Objects;
+
 public class MySQLConstraint {
 
     private String name;
@@ -9,6 +11,7 @@ public class MySQLConstraint {
     private String referencedTable;
     private String referencedColumn;
 
+
     public MySQLConstraint(String name, String type, String table, String column, String referencedTable, String referencedColumn) {
         this.name = name;
         this.type = type;
@@ -16,6 +19,22 @@ public class MySQLConstraint {
         this.column = column;
         this.referencedTable = referencedTable;
         this.referencedColumn = referencedColumn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MySQLConstraint)) return false;
+        MySQLConstraint that = (MySQLConstraint) o;
+        return Objects.equals(getType(), that.getType()) &&
+                Objects.equals(getTable(), that.getTable()) &&
+                Objects.equals(getColumn(), that.getColumn());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getType(), getTable(), getColumn());
     }
 
     public String getName() {

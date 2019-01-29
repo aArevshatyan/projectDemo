@@ -2,6 +2,7 @@ package am.aca.components.tables;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import am.aca.components.columns.PostgreSQLColumn;
 import am.aca.components.constraints.PostgreSQLConstraint;
@@ -10,22 +11,45 @@ public class PostgreSQLTable {
 
     private String name;
     private String type;
+    private boolean enabled;
 
     private List<PostgreSQLColumn> columns;
     private List<PostgreSQLConstraint> constraints;
 
-    public PostgreSQLTable(String name, String type){
+    public PostgreSQLTable(String name, String type) {
         this.name = name;
         this.type = type;
         this.columns = new ArrayList<>();
         this.constraints = new ArrayList<>();
     }
 
-    public void addColumn(PostgreSQLColumn column){
+
+    public List<PostgreSQLConstraint> getConstraintByPrimaryKey() {
+        List<PostgreSQLConstraint> constraintsByPK = new ArrayList<>();
+        for (PostgreSQLConstraint mySQLConstraint : constraints) {
+            if ("PRIMARY KEY".equals(mySQLConstraint.getType())) {
+                constraintsByPK.add(mySQLConstraint);
+            }
+        }
+
+        return constraintsByPK.stream().distinct().collect(Collectors.toList());
+    }
+
+    public List<PostgreSQLConstraint> getConstraintByForeignKey() {
+        List<PostgreSQLConstraint> constraintsByFK = new ArrayList<>();
+        for (PostgreSQLConstraint mySQLConstraint : constraints) {
+            if ("FOREIGN KEY".equals(mySQLConstraint.getType())) {
+                constraintsByFK.add(mySQLConstraint);
+            }
+        }
+        return constraintsByFK;
+    }
+
+    public void addColumn(PostgreSQLColumn column) {
         this.columns.add(column);
     }
 
-    public void addConstraint (PostgreSQLConstraint constraint){
+    public void addConstraint(PostgreSQLConstraint constraint) {
         this.constraints.add(constraint);
     }
 
@@ -66,5 +90,13 @@ public class PostgreSQLTable {
         return "PostgreSQLTable{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

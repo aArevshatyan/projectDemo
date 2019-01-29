@@ -19,7 +19,7 @@ public class Schema<T> {
         this.tables = tables;
     }
 
-    public void addTable(T table){
+    public void addTable(T table) {
         this.tables.add(table);
     }
 

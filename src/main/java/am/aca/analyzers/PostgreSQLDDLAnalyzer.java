@@ -3,11 +3,12 @@ package am.aca.analyzers;
 import java.sql.*;
 
 import am.aca.components.Schema;
+import am.aca.components.utils.Nullable;
 import am.aca.components.tables.PostgreSQLTable;
 import am.aca.components.columns.PostgreSQLColumn;
 import am.aca.components.constraints.PostgreSQLConstraint;
 
-public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
+public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
 
     private Connection connection;
 
@@ -63,7 +64,7 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer {
                             resultSet.getString(1),
                             resultSet.getInt(2),
                             resultSet.getString(3),
-                            resultSet.getString(4),
+                            Nullable.valueOf(resultSet.getString(4)),
                             resultSet.getString(5),
                             resultSet.getInt(6),
                             resultSet.getInt(7),

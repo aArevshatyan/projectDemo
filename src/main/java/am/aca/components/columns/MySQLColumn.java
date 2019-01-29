@@ -1,23 +1,24 @@
 package am.aca.components.columns;
 
+import am.aca.components.utils.Nullable;
+
 public class MySQLColumn {
 
     private String name;
     private int ordinalPosition;
     private String defaultValue;
-    private String isNullable;
+    private Nullable isNullable;
     private String dataType;
     private int characterMaximumLength;
     private int characterOctetLength;
     private int numericPrecision;
     private int numericScale;
     private String type;
-    private String key;
 
     public MySQLColumn(String name, int ordinalPosition, String defaultValue,
-                       String isNullable, String dataType, int characterMaximumLength,
-                       int characterOctetLength, int numericPrecision, int numericScale,
-                       String type, String key) {
+                       Nullable isNullable, String dataType, int characterMaximumLength,
+                       int characterOctetLength, int numericPrecision, int numericScale
+    ) {
         this.name = name;
         this.ordinalPosition = ordinalPosition;
         this.defaultValue = defaultValue;
@@ -27,8 +28,20 @@ public class MySQLColumn {
         this.characterOctetLength = characterOctetLength;
         this.numericPrecision = numericPrecision;
         this.numericScale = numericScale;
-        this.type = type;
-        this.key = key;
+
+
+        this.type = dataType +
+                ((characterMaximumLength != 0 && characterMaximumLength != 256) ? (
+                        "(" + characterMaximumLength + ")"
+                ) : "") +
+                ((numericPrecision != 0 && numericPrecision != 32) ?
+                        ("(" + numericPrecision + "" +
+                                ((numericScale != 0) ?
+                                        (" , " + numericScale + ")")
+                                        : ")"))
+                        : "")
+        ;
+
     }
 
     public String getName() {
@@ -55,11 +68,11 @@ public class MySQLColumn {
         this.defaultValue = defaultValue;
     }
 
-    public String getIsNullable() {
+    public Nullable getIsNullable() {
         return isNullable;
     }
 
-    public void setIsNullable(String isNullable) {
+    public void setIsNullable(Nullable isNullable) {
         this.isNullable = isNullable;
     }
 
@@ -103,6 +116,7 @@ public class MySQLColumn {
         this.numericScale = numericScale;
     }
 
+
     public String getType() {
         return type;
     }
@@ -111,26 +125,13 @@ public class MySQLColumn {
         this.type = type;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
 
     @Override
     public String toString() {
         return "MySQLColumn{" +
                 "name='" + name + '\'' +
-                ", datatype =" + dataType +
-                ((characterMaximumLength != 0)? ("(" + characterMaximumLength + "") : "") +
-                ((numericPrecision != 0)? ("(" + numericPrecision + "") : "") +
-                ((numericScale != 0)? ("),(" + numericScale+ ")") : ")") +
+                ", datatype =" + type +
+                " Nullable : " + isNullable.toString() +
                 "}";
     }
 }
-/* private int characterMaximumLength;
-    private int numericPrecision;
-    private int numericScale;*/

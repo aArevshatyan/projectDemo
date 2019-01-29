@@ -4,8 +4,8 @@ import java.sql.SQLException;
 
 import am.aca.components.Schema;
 
-public interface DDLAnalyzer {
+public interface DDLAnalyzer<R> {
 
-    Schema getSchemaOf(String url) throws SQLException;
+    Schema<R> getSchemaOf(String url) throws SQLException;
 
 }

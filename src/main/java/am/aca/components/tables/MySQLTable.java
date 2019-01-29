@@ -2,6 +2,7 @@ package am.aca.components.tables;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import am.aca.components.columns.MySQLColumn;
 import am.aca.components.constraints.MySQLConstraint;
@@ -10,12 +11,13 @@ public class MySQLTable {
 
     private String name;
     private String type;
+    private boolean enabled;
 
     private List<MySQLColumn> columns;
     private List<MySQLConstraint> constraints;
 
 
-    public MySQLTable(String name, String type){
+    public MySQLTable(String name, String type) {
         this.name = name;
         this.type = type;
         this.columns = new ArrayList<>();
@@ -23,20 +25,35 @@ public class MySQLTable {
     }
 
 
-    public MySQLConstraint getConstraintByName (String name){
-        for (MySQLConstraint constraint : this.constraints) {
-            if(constraint.getName().equals(name)) return constraint;
+    public List<MySQLConstraint> getConstraintByPrimaryKey() {
+        List<MySQLConstraint> constraintsByPK = new ArrayList<>();
+        for (MySQLConstraint mySQLConstraint : constraints) {
+            if ("PRIMARY KEY".equals(mySQLConstraint.getType())) {
+                constraintsByPK.add(mySQLConstraint);
+            }
         }
-        return null;
+
+        return constraintsByPK.stream().distinct().collect(Collectors.toList());
     }
 
-    public void addColumn(MySQLColumn column){
+    public List<MySQLConstraint> getConstraintByForeignKey() {
+        List<MySQLConstraint> constraintsByFK = new ArrayList<>();
+        for (MySQLConstraint mySQLConstraint : constraints) {
+            if ("FOREIGN KEY".equals(mySQLConstraint.getType())) {
+                constraintsByFK.add(mySQLConstraint);
+            }
+        }
+        return constraintsByFK;
+    }
+
+
+    public void addColumn(MySQLColumn column) {
         this.columns.add(column);
     }
 
-    public void addConstraint (MySQLConstraint constraint){
+    public void addConstraint(MySQLConstraint constraint) {
         this.constraints.add(constraint);
-}
+    }
 
     public List<MySQLColumn> getColumns() {
         return new ArrayList<>(columns);
@@ -75,5 +92,13 @@ public class MySQLTable {
         return "MySQLTable{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

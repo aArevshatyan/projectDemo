@@ -3,12 +3,13 @@ package am.aca.analyzers;
 import java.sql.*;
 
 import am.aca.components.Schema;
+import am.aca.components.utils.Nullable;
 import am.aca.components.tables.MySQLTable;
 import am.aca.components.columns.MySQLColumn;
-import am.aca.components.constraints.MySQLConstraint;
 import am.aca.components.utils.JdbcUrlHelper;
+import am.aca.components.constraints.MySQLConstraint;
 
-public class MySQLDDLAnalyzer implements DDLAnalyzer {
+public class MySQLDDLAnalyzer implements DDLAnalyzer<MySQLTable> {
 
     private Connection connection;
 
@@ -34,8 +35,8 @@ public class MySQLDDLAnalyzer implements DDLAnalyzer {
 
         PreparedStatement showTablesStatement = connection.prepareStatement(
                 " SELECT TABLE_NAME, TABLE_TYPE " +
-                " FROM INFORMATION_SCHEMA.TABLES" +
-                " WHERE TABLE_SCHEMA = ?");
+                        " FROM INFORMATION_SCHEMA.TABLES" +
+                        " WHERE TABLE_SCHEMA = ?");
         showTablesStatement.setString(1, dbName);
         ResultSet resultSet = showTablesStatement.executeQuery();
 
@@ -53,7 +54,7 @@ public class MySQLDDLAnalyzer implements DDLAnalyzer {
         PreparedStatement showColumnsStatement = connection.prepareStatement(
                 "SELECT COLUMN_NAME, ORDINAL_POSITION, COLUMN_DEFAULT, " +
                         "IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, CHARACTER_OCTET_LENGTH, " +
-                        "NUMERIC_PRECISION, NUMERIC_SCALE, COLUMN_TYPE, COLUMN_KEY " +
+                        "NUMERIC_PRECISION, NUMERIC_SCALE " +
                         "FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? ;");
         showColumnsStatement.setString(1, table.getName());
         ResultSet resultSet = showColumnsStatement.executeQuery();
@@ -64,14 +65,12 @@ public class MySQLDDLAnalyzer implements DDLAnalyzer {
                             resultSet.getString(1),
                             resultSet.getInt(2),
                             resultSet.getString(3),
-                            resultSet.getString(4),
+                            Nullable.valueOf(resultSet.getString(4)),
                             resultSet.getString(5),
                             resultSet.getInt(6),
                             resultSet.getInt(7),
                             resultSet.getInt(8),
-                            resultSet.getInt(9),
-                            resultSet.getString(10),
-                            resultSet.getString(11)
+                            resultSet.getInt(9)
                     )
             );
         }
