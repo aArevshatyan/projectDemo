@@ -33,8 +33,8 @@ public class PostgreSQLColumn {
         if (numericPrecision != 0 && numericPrecision != 32) dataType = "Numeric";
 
         this.type = dataType +
-                ((characterMaximumLength != 0 && characterMaximumLength != 65535 && characterMaximumLength != 256) ?
-                        ("(" + characterMaximumLength + ")")
+                ((characterMaximumLength != 0 && characterMaximumLength != 65535 ) ?
+                        ("(" + (characterMaximumLength - 1) + ")")
                         : "") +
                 ((numericPrecision != 0 && numericPrecision != 32) ?
                         ("(" + numericPrecision + ((numericScale != 0) ?

@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import am.aca.components.columns.PostgreSQLColumn;
 import am.aca.components.constraints.PostgreSQLConstraint;
 
-public class PostgreSQLTable {
+public class PostgreSQLTable implements Table{
 
     private String name;
     private String type;
@@ -53,6 +53,7 @@ public class PostgreSQLTable {
         this.constraints.add(constraint);
     }
 
+    @Override
     public List<PostgreSQLColumn> getColumns() {
         return new ArrayList<>(columns);
     }
@@ -69,6 +70,7 @@ public class PostgreSQLTable {
         this.constraints = postgreSQLConstraints;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -92,6 +94,7 @@ public class PostgreSQLTable {
                 '}';
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }

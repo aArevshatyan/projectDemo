@@ -1,32 +1,20 @@
 package am.aca.generators;
 
 import java.sql.*;
-import java.util.*;
 
 import am.aca.components.Schema;
+import am.aca.components.generatedSQLs.GeneratedForeignSQls;
+import am.aca.components.generatedSQLs.GeneratedPrimarySQLs;
 import am.aca.components.tables.PostgreSQLTable;
 import am.aca.components.constraints.PostgreSQLConstraint;
+import am.aca.components.generatedSQLs.GeneratedCreateSQLs;
+import am.aca.components.utils.UnsupportedFeatures;
 
 public class PostgreSQLGenerator implements Generator<PostgreSQLTable> {
 
-    private static class UnsupportedFeatures {
-        private static List<String> unsupportedFeatures = new ArrayList<>();
-
-        public static void add(String s) {
-            unsupportedFeatures.add(s);
-        }
-    }
-
-    private static class GeneratedSQLs {
-        private static List<String> generatedSQLs = new ArrayList<>();
-
-        public static void add(String s) {
-            generatedSQLs.add(s);
-        }
-    }
 
     @Override
-    public void generateSQLOf(Schema<PostgreSQLTable> schema) {
+    public void generateSQLOf(Schema<PostgreSQLTable> schema) throws SQLException {
         schema
                 .getTables()
                 .stream()
@@ -54,7 +42,7 @@ public class PostgreSQLGenerator implements Generator<PostgreSQLTable> {
                     sql.setLength(sql.length() - 1);
                     sql.append(");\n");
 
-                    GeneratedSQLs.add(sql.toString());
+                    GeneratedCreateSQLs.add(sql.toString());
                     sql.setLength(0);
                 });
 
@@ -75,7 +63,7 @@ public class PostgreSQLGenerator implements Generator<PostgreSQLTable> {
                     sql.setLength(sql.length() - 1);
                     sql.append(");\n");
 
-                    GeneratedSQLs.add(sql.toString());
+                    GeneratedPrimarySQLs.add(sql.toString());
                     sql.setLength(0);
                 });
         schema
@@ -110,7 +98,7 @@ public class PostgreSQLGenerator implements Generator<PostgreSQLTable> {
                                             .append(constraint.getReferencedColumn())
                                             .append(");\n");
 
-                                    GeneratedSQLs.add(sql.toString());
+                                    GeneratedForeignSQls.add(sql.toString());
                                     sql.setLength(0);
 
                                 } else {
@@ -120,25 +108,5 @@ public class PostgreSQLGenerator implements Generator<PostgreSQLTable> {
                             });
                 });
 
-        System.out.println(GeneratedSQLs.generatedSQLs);
-        System.out.println("-----------");
-        System.out.println(UnsupportedFeatures.unsupportedFeatures);
-
-
-        try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/test2",
-                    "postgres",
-                    "root"
-            );
-            for (String s : GeneratedSQLs.generatedSQLs) {
-                PreparedStatement preparedStatement = connection.prepareStatement(s);
-                preparedStatement.executeUpdate();
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
-    }
 }

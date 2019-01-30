@@ -12,14 +12,22 @@ import am.aca.components.constraints.MySQLConstraint;
 public class MySQLDDLAnalyzer implements DDLAnalyzer<MySQLTable> {
 
     private Connection connection;
+    private String url;
+    private String username;
+    private String password;
+
+    public MySQLDDLAnalyzer(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
-    public Schema<MySQLTable> getSchemaOf(String url) throws SQLException {
-        String user = "root";
-        String password = "root";
+    public Schema<MySQLTable> getSchema() throws SQLException {
+
         this.connection = DriverManager.getConnection(
                 url,
-                user,
+                username,
                 password
         );
 

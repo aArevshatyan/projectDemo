@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import am.aca.components.columns.MySQLColumn;
 import am.aca.components.constraints.MySQLConstraint;
 
-public class MySQLTable {
+public class MySQLTable implements Table{
 
     private String name;
     private String type;
@@ -55,6 +55,7 @@ public class MySQLTable {
         this.constraints.add(constraint);
     }
 
+    @Override
     public List<MySQLColumn> getColumns() {
         return new ArrayList<>(columns);
     }
@@ -71,6 +72,7 @@ public class MySQLTable {
         this.constraints = constraints;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -94,6 +96,7 @@ public class MySQLTable {
                 '}';
     }
 
+    @Override
     public boolean isEnabled() {
         return enabled;
     }

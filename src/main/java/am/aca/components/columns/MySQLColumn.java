@@ -31,8 +31,8 @@ public class MySQLColumn {
 
 
         this.type = dataType +
-                ((characterMaximumLength != 0 && characterMaximumLength != 256) ? (
-                        "(" + characterMaximumLength + ")"
+                ((characterMaximumLength != 0 ) ? (
+                        "(" + (characterMaximumLength-1) + ")"
                 ) : "") +
                 ((numericPrecision != 0 && numericPrecision != 32) ?
                         ("(" + numericPrecision + "" +

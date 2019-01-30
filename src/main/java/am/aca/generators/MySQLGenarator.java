@@ -1,31 +1,18 @@
 package am.aca.generators;
 
 import java.sql.*;
-import java.util.*;
 
 import am.aca.components.Schema;
+import am.aca.components.generatedSQLs.GeneratedForeignSQls;
+import am.aca.components.generatedSQLs.GeneratedPrimarySQLs;
 import am.aca.components.tables.MySQLTable;
+import am.aca.components.generatedSQLs.GeneratedCreateSQLs;
+import  am.aca.components.utils.UnsupportedFeatures;
 
 public class MySQLGenarator implements Generator<MySQLTable> {
 
-    private static class UnsupportedFeatures {
-        private static List<String> unsupportedFeatures = new ArrayList<>();
-
-        public static void add(String s) {
-            unsupportedFeatures.add(s);
-        }
-    }
-
-    private static class GeneratedSQLs {
-        private static List<String> generatedSQLs = new ArrayList<>();
-
-        public static void add(String s) {
-            generatedSQLs.add(s);
-        }
-    }
-
     @Override
-    public void generateSQLOf(Schema<MySQLTable> schema) {
+    public void generateSQLOf(Schema<MySQLTable> schema) throws SQLException {
 
         StringBuilder sql = new StringBuilder();
 
@@ -53,7 +40,7 @@ public class MySQLGenarator implements Generator<MySQLTable> {
                     sql.replace(sql.toString().lastIndexOf(","), sql.toString().lastIndexOf(",") + 1, "");
                     sql.append(");\n\n\n");
 
-                    GeneratedSQLs.add(sql.toString());
+                    GeneratedCreateSQLs.add(sql.toString());
                     sql.setLength(0);
                 });
 
@@ -77,7 +64,7 @@ public class MySQLGenarator implements Generator<MySQLTable> {
                     sql.replace(sql.toString().lastIndexOf(","), sql.toString().lastIndexOf(",") + 1, "");
                     sql.append(");\n\n\n");
 
-                    GeneratedSQLs.add(sql.toString());
+                    GeneratedPrimarySQLs.add(sql.toString());
                     sql.setLength(0);
                 });
 
@@ -113,7 +100,7 @@ public class MySQLGenarator implements Generator<MySQLTable> {
                                                     .append(constraint.getReferencedColumn())
                                                     .append("); \n \n");
 
-                                            GeneratedSQLs.add(sql.toString());
+                                            GeneratedForeignSQls.add(sql.toString());
                                             sql.setLength(0);
                                         } else {
                                             UnsupportedFeatures.add("Can't create " + constraint.getTable() +
@@ -125,24 +112,11 @@ public class MySQLGenarator implements Generator<MySQLTable> {
                                     });
                 });
 
-        System.out.println(UnsupportedFeatures.unsupportedFeatures);
-        System.out.println("--------------");
-        System.out.println(GeneratedSQLs.generatedSQLs);
 
-        try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/test2",
-                    "root",
-                    "root"
-            );
 
-            for (String s : GeneratedSQLs.generatedSQLs) {
-                PreparedStatement preparedStatement = connection.prepareStatement(s);
-                preparedStatement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+
+
 
     }
 }

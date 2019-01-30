@@ -1,8 +1,13 @@
 package am.aca.converters;
 
+import am.aca.components.utils.JdbcUrlHelper;
+
 public class ConverterFactory {
 
-    public static Converter getConverter(String from, String to) {
+    public static Converter getConverter(String urlFrom, String urlTo) {
+
+        String from = JdbcUrlHelper.getDbType(urlFrom);
+        String to = JdbcUrlHelper.getDbType(urlTo);
 
         switch (from) {
             case "postgresql": {

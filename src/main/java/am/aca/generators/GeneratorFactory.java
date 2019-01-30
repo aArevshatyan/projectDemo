@@ -1,7 +1,11 @@
 package am.aca.generators;
 
+import am.aca.components.utils.JdbcUrlHelper;
+
 public class GeneratorFactory {
-    public static Generator getGenerator(String type) {
+    public static Generator getGenerator(String url) {
+
+        String type = JdbcUrlHelper.getDbType(url);
 
         switch (type) {
             case "mysql":

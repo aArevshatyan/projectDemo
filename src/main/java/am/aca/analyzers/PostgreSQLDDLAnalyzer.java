@@ -11,14 +11,22 @@ import am.aca.components.constraints.PostgreSQLConstraint;
 public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
 
     private Connection connection;
+    private String url;
+    private String username;
+    private String password;
+
+    public PostgreSQLDDLAnalyzer(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
-    public Schema<PostgreSQLTable> getSchemaOf(String url) throws SQLException {
-        String user = "root";
-        String password = "root";
+    public Schema<PostgreSQLTable> getSchema() throws SQLException {
+
         this.connection = DriverManager.getConnection(
                 url,
-                user,
+                username,
                 password
         );
 

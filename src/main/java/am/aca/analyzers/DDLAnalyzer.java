@@ -6,6 +6,6 @@ import am.aca.components.Schema;
 
 public interface DDLAnalyzer<R> {
 
-    Schema<R> getSchemaOf(String url) throws SQLException;
+    Schema<R> getSchema() throws SQLException;
 
 }
