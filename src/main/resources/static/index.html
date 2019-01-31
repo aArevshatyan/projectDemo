@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>DBmigration home page</title>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <div class="message signup">
+        <div class="btn-wrapper">
+            <button class="button" id="from">URL from</button>
+            <button class="button" id="to">URL to</button>
+        </div>
+    </div>
+    <div class="form form--signup">
+        <div class="form--heading">Please enter your source db details</div>
+        <form autocomplete="off">
+            <input type="text" placeholder="URL From" name="urlFrom">
+            <input type="text" placeholder="Username" name="usernameFrom">
+            <input type="password" placeholder="Password" name="passwordFrom">
+        </form>
+    </div>
+    <div class="form form--login">
+        <div class="form--heading">Please enter your destination db details</div>
+        <form autocomplete="off">
+            <input type="text" placeholder="URL To" name="urlTo">
+            <input type="text" placeholder="Username" name="usernameTO">
+            <input type="password" placeholder="Password" name="passwordTo">
+            <button class="button">Get schema</button>
+        </form>
+    </div>
+</div>
+<script src="js/index.js"></script>
+
+</body>
+</html>
