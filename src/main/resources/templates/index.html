@@ -2,24 +2,25 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>DBmigration home page</title>
-    <link href="../static/css/index.css" th:href="@{/css/index.css}" rel="stylesheet" />
+    <link href="../static/css/index.css" th:href="@{/css/index.css}" rel="stylesheet"/>
     <!--<script-->
-            <!--src="https://code.jquery.com/jquery-3.3.1.min.js"-->
-            <!--integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="-->
-            <!--crossorigin="anonymous"></script>-->
+    <!--src="https://code.jquery.com/jquery-3.3.1.min.js"-->
+    <!--integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="-->
+    <!--crossorigin="anonymous"></script>-->
 </head>
 <body>
 <form autocomplete="off" method="post" action="/">
     <div class="container">
         <div class="form form--from">
             <div class="form--heading">Please enter your source db details</div>
-            <input type="text" placeholder="URL From" name="urlFrom">
-            <input type="text" placeholder="Username" name="usernameFrom">
-            <input type="password" placeholder="Password" name="passwordFrom">
+            <!--TODO remove hardcoded values-->
+            <input type="text" placeholder="URL From" name="urlFrom" value="jdbc:postgresql://aca-db.duckdns.org:5432/postgres"/>
+            <input type="text" placeholder="Username" name="usernameFrom" value="root"/>
+            <input type="password" placeholder="Password" name="passwordFrom" value="root"/>
         </div>
         <div class="message buttons">
             <div class="btn-wrapper">
-                <button class="button" >Get schema</button>
+                <button class="button">Get schema</button>
             </div>
         </div>
     </div>
