@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>DBmigration home page</title>
+    <link href="../static/css/index.css" th:href="@{/css/index.css}" rel="stylesheet" />
+    <!--<script-->
+            <!--src="https://code.jquery.com/jquery-3.3.1.min.js"-->
+            <!--integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="-->
+            <!--crossorigin="anonymous"></script>-->
+</head>
+<body>
+<form autocomplete="off" method="post" action="/">
+    <div class="container">
+        <div class="form form--from">
+            <div class="form--heading">Please enter your source db details</div>
+            <input type="text" placeholder="URL From" name="urlFrom">
+            <input type="text" placeholder="Username" name="usernameFrom">
+            <input type="password" placeholder="Password" name="passwordFrom">
+        </div>
+        <div class="message buttons">
+            <div class="btn-wrapper">
+                <button class="button" >Get schema</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--<script src="../static/js/index.js"></script>-->
+
+</body>
+</html>

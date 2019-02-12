@@ -18,14 +18,15 @@ import am.aca.backWork.components.utils.JdbcUrlHelper;
 
 public class DbMigration{
 
-    public static void test() throws SQLException {
+    public static void test(String urlFrom, String usernameFrom, String passwordFrom,
+                            String urlTo, String usernameTo, String passwordTo) throws SQLException {
 
-        String usernameFrom = "root";
-//        String usernameFrom = "postgres";
-//        String usernameTo = "root";
-        String usernameTo = "postgres";
-        String passwordFrom = "root";
-        String passwordTo = "root";
+
+
+        Schema mySQLSchema = DDLAnalyzerFactory.
+                getAnalyzer(urlFrom, usernameFrom, passwordFrom)
+                .getSchema();
+
 
 
 //        String jdbcMySQLUrl = "jdbc:mysql://aca-db.duckdns.org:3306/do_not_touch";
@@ -35,13 +36,7 @@ public class DbMigration{
 
 //        String jdbcPostgreSqlUrl = "jdbc:postgresql://aca-db.duckdns.org:5432/postgres";
         String jdbcPostgreSqlUrl = "jdbc:postgresql://localhost:5432/test2";
-//
-        Schema mySQLSchema = DDLAnalyzerFactory.
-                getAnalyzer(jdbcMySQLUrl, usernameFrom, passwordFrom)
-                .getSchema();
-//        Schema postgreSQLSchema = DDLAnalyzerFactory
-//                .getAnalyzer(jdbcPostgreSqlUrl, usernameFrom, passwordFrom)
-//                .getSchema();
+
 
         Schema mySQLSchemaAfterSelected = userSelectedTables(mySQLSchema, jdbcMySQLUrl);
 //        Schema postgreSQLSchemaAfterSelected = userSelectedTables(postgreSQLSchema, jdbcPostgreSqlUrl);

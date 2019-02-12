@@ -1,2 +1,8 @@
 server:
   port: 8080
+#spring:
+#  mvc:
+#    view:
+#      prefix: classpath:
+#      suffix: .jsp
+
