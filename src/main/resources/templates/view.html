@@ -15,33 +15,25 @@
         <input type="checkbox" th:text="${table.name}"/>
     </label>
 </div>
-
-<button id="createTest" onclick="generateSqls()">Select tables</button>
-
-<div style="border: 1px solid; width: 1024px; height: 200px;">
-
-</div>
-
+<button id="select" onclick="selectTables()">Prepare to migration</button>
 <form autocomplete="off" method="post" action="/">
-    <div class="container">
-        <div class="form form--from">
-            <div class="form--heading">Please enter your source db details</div>
-            <!--TODO remove hardcoded values-->
-            <input type="text" placeholder="URL From" name="urlFrom" value="jdbc:postgresql://aca-db.duckdns.org:5432/postgres"/>
-            <input type="text" placeholder="Username" name="usernameFrom" value="root"/>
-            <input type="password" placeholder="Password" name="passwordFrom" value="root"/>
-        </div>
-        <div class="message buttons">
-            <div class="btn-wrapper">
-                <button class="button">Migrate</button>
-            </div>
-        </div>
+    <div class="form form--from">
+        <div class="form--heading">Please enter your source db details</div>
+        <!--TODO remove hardcoded values-->
+        <input type="text" placeholder="URL To" name="urlTo" value="jdbc:postgresql://localhost:5432/postgres"/>
+        <input type="text" placeholder="Username" name="usernameTo" value="postgres"/>
+        <input type="password" placeholder="Password" name="passwordTo" value="root"/>
     </div>
+    <button id="createTest" onclick="generateSqls()">Prepare to migration</button>
 </form>
 
-<div style="border: 1px solid; width: 1024px; height: 200px;">
 
-</div>
+<div style="border: 1px solid; width: 1024px; height: 200px;"></div>
+
+<button class="button">Migrate</button>
+
+<div style="border: 1px solid; width: 1024px; height: 200px;"></div>
+
 
 </body>
 </html>

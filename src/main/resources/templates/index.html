@@ -3,10 +3,7 @@
 <head>
     <title>DBmigration home page</title>
     <link href="../static/css/index.css" th:href="@{/css/index.css}" rel="stylesheet"/>
-    <!--<script-->
-    <!--src="https://code.jquery.com/jquery-3.3.1.min.js"-->
-    <!--integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="-->
-    <!--crossorigin="anonymous"></script>-->
+
 </head>
 <body>
 <form autocomplete="off" method="post" action="/">
@@ -14,7 +11,7 @@
         <div class="form form--from">
             <div class="form--heading">Please enter your source db details</div>
             <!--TODO remove hardcoded values-->
-            <input type="text" placeholder="URL From" name="urlFrom" value="jdbc:postgresql://aca-db.duckdns.org:5432/postgres"/>
+            <input type="text" placeholder="URL From" name="urlFrom" value="jdbc:mysql://localhost:3306/test2"/>
             <input type="text" placeholder="Username" name="usernameFrom" value="root"/>
             <input type="password" placeholder="Password" name="passwordFrom" value="root"/>
         </div>
@@ -26,7 +23,6 @@
     </div>
 </form>
 
-<!--<script src="../static/js/index.js"></script>-->
 
 </body>
 </html>

@@ -28,18 +28,13 @@ public class DbWorkController {
     }
 
     @PostMapping("/")
-    public ModelAndView urlInput(HttpServletRequest httpServletRequest) {
+    public ModelAndView urlToInput(HttpServletRequest httpServletRequest) {
 
         this.urlFrom = httpServletRequest.getParameter("urlFrom");
         this.usernameFrom = httpServletRequest.getParameter("usernameFrom");
         this.passwordFrom = httpServletRequest.getParameter("passwordFrom");
-
         return new ModelAndView("redirect:/schema");
     }
-
-    ///// redirecta linum tablenery checkboxerov lcrac viewi mej u submit kochakov
-    ///// heta galis eli viewi vra errornerov u accept u decline kochaknerov
-    ///// 2i depqum el heta galis index.html.i vra accepti depqum successful messageov
 
 
     @GetMapping("/schema")
@@ -50,9 +45,12 @@ public class DbWorkController {
         return modelAndView;
     }
 
-
-    /*@PostMapping("/schema")
-    public ModelAndView generateSqlsAndNotSupportedFeatures() {
+/*
+    @PostMapping("/schema")
+    public ModelAndView urlFromInput(HttpServletRequest httpServletRequest) {
+        this.urlFrom = httpServletRequest.getParameter("urlFrom");
+        this.usernameFrom = httpServletRequest.getParameter("usernameFrom");
+        this.passwordFrom = httpServletRequest.getParameter("passwordFrom");
 
         return new ModelAndView("view.html");
     }*/

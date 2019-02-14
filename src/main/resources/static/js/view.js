@@ -8,3 +8,7 @@ function generateSqls() {
 
     alert(tables);
 }
+
+function selectTables() {
+
+}
