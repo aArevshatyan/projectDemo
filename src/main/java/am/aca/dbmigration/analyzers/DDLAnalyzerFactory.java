@@ -14,12 +14,6 @@ public class DDLAnalyzerFactory {
                 return new MySQLDDLAnalyzer(url, username, password);
             case "postgresql":
                 return new PostgreSQLDDLAnalyzer(url, username, password);
-
-            /*case "oracle":
-                return new OracleDDLAnalyzer();
-            case "sqlserver":
-                return new SQLServerDDLAnalyzer();*/
-
             default:
                 throw new UnsupportedOperationException("Unsupported RDBMS");
         }

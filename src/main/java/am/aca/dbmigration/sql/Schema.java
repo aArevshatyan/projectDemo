@@ -1,8 +1,8 @@
 package am.aca.dbmigration.sql;
 
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 public class Schema<T> {
 
@@ -23,17 +23,4 @@ public class Schema<T> {
     public void addTable(T table) {
         this.tables.add(table);
     }
-
-    //private List<Procedure> procedures;
-    //private List<View> views ;
-    //private List<Trigger> triggers ;
-    //sequences
-    //synonyms
-    //indexes
-    //clusters
-    //database links
-    //snapshots
-    //functions
-    //packages
-
 }

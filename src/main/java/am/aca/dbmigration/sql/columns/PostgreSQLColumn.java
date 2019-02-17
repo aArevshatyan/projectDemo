@@ -14,7 +14,6 @@ public class PostgreSQLColumn {
     private int characterOctetLength;
     private int numericPrecision;
     private int numericScale;
-
     private String type;
 
     public PostgreSQLColumn(String name, int ordinalPosition, String defaultValue,

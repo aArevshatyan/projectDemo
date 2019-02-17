@@ -5,8 +5,8 @@ import java.sql.*;
 import am.aca.dbmigration.sql.Schema;
 import am.aca.dbmigration.sql.utils.Nullable;
 import am.aca.dbmigration.sql.tables.MySQLTable;
-import am.aca.dbmigration.sql.columns.MySQLColumn;
 import am.aca.dbmigration.sql.utils.JdbcUrlHelper;
+import am.aca.dbmigration.sql.columns.MySQLColumn;
 import am.aca.dbmigration.sql.constraints.MySQLConstraint;
 
 public class MySQLDDLAnalyzer implements DDLAnalyzer<MySQLTable> {

@@ -88,18 +88,19 @@ public class PostgreSQLTable implements Table{
     }
 
     @Override
-    public String toString() {
-        return "PostgreSQLTable{" +
-                "name='" + name + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "PostgreSQLTable{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

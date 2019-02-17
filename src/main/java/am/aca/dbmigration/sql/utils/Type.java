@@ -39,17 +39,20 @@ public enum Type {
     private static List<String> mysql;
     private static List<String> postgres;
 
+    Type(String pType, String mType) {
+        if (getMysql() == null) setMysql(new ArrayList<>());
+        if (getPostgres() == null) setPostgres(new ArrayList<>());
+        addMysql(mType);
+        addPostgresql(pType);
+    }
+
     public void addMysql(String s) {
         mysql.add(s);
     }
 
-    ;
-
     public void addPostgresql(String s) {
         postgres.add(s);
     }
-
-    ;
 
     public static List<String> getPostgres() {
         return postgres;
@@ -67,13 +70,6 @@ public enum Type {
         Type.postgres = postgres;
     }
 
-    Type(String pType, String mType) {
-        if (getMysql() == null) setMysql(new ArrayList<>());
-        if (getPostgres() == null) setPostgres(new ArrayList<>());
-        addMysql(mType);
-        addPostgresql(pType);
-    }
-
     public static String getDataType(String from, String to, String myType) {
 
         List<String> fromList;
@@ -84,7 +80,7 @@ public enum Type {
         for (int i = 0; i < fromList.size(); i++) {
             if (fromList.get(i).equals(myType)) return toList.get(i);
         }
-        throw new UnsupportedOperationException( myType + "Unsupported Type");
+        throw new UnsupportedOperationException(myType + "Unsupported Type");
     }
 
     private static List<String> getStrings(String dbType) {

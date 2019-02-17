@@ -6,7 +6,7 @@ import am.aca.dbmigration.sql.tables.PostgreSQLTable;
 
 public class DataMigratorFactory {
 
-    public static DataMigrator getDataMigrator(String urlFrom, String urlTo , String usernameFrom, String passwordFrom){
+    public static DataMigrator getDataMigrator(String urlFrom, String urlTo, String usernameFrom, String passwordFrom) {
 
         String dbFrom = JdbcUrlHelper.getDbType(urlFrom);
         String dbTo = JdbcUrlHelper.getDbType(urlTo);
@@ -14,7 +14,7 @@ public class DataMigratorFactory {
             case "postgresql": {
                 switch (dbTo) {
                     case "mysql":
-                        return new DataMigrator<MySQLTable>(urlFrom, usernameFrom, passwordFrom );
+                        return new DataMigrator<MySQLTable>(urlFrom, usernameFrom, passwordFrom);
                     default:
                         throw new UnsupportedOperationException("Unsupported RDBMS");
                 }
@@ -29,9 +29,6 @@ public class DataMigratorFactory {
                 }
             }
 
-            /*case "oracle": {}
-            case "sqlserver":{}
-            */
             default:
                 throw new UnsupportedOperationException("Unsupported RDBMS");
         }

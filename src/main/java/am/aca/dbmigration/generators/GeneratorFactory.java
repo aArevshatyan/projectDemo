@@ -16,9 +16,5 @@ public class GeneratorFactory {
             default:
                 throw new UnsupportedOperationException("Unsupported RDBMS");
         }
-
-            /*case "oracle": {}
-            case "sqlserver":{}
-            */
     }
 }

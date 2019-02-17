@@ -1,14 +1,13 @@
 package am.aca.dbmigration.converters;
 
-
 import am.aca.dbmigration.sql.Schema;
+import am.aca.dbmigration.sql.utils.Type;
+import am.aca.dbmigration.sql.tables.MySQLTable;
 import am.aca.dbmigration.sql.columns.MySQLColumn;
+import am.aca.dbmigration.sql.tables.PostgreSQLTable;
 import am.aca.dbmigration.sql.columns.PostgreSQLColumn;
 import am.aca.dbmigration.sql.constraints.MySQLConstraint;
 import am.aca.dbmigration.sql.constraints.PostgreSQLConstraint;
-import am.aca.dbmigration.sql.tables.MySQLTable;
-import am.aca.dbmigration.sql.tables.PostgreSQLTable;
-import am.aca.dbmigration.sql.utils.Type;
 
 public class MySQLToPostgreSql implements Converter<MySQLTable, PostgreSQLTable> {
     @Override

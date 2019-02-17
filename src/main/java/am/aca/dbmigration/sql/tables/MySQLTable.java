@@ -90,18 +90,19 @@ public class MySQLTable implements Table{
     }
 
     @Override
-    public String toString() {
-        return "MySQLTable{" +
-                "name='" + name + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @Override
+    public String toString() {
+        return "MySQLTable{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

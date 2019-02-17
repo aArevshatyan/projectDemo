@@ -28,9 +28,6 @@ public class ConverterFactory {
                 }
             }
 
-            /*case "oracle": {}
-            case "sqlserver":{}
-            */
             default:
                 throw new UnsupportedOperationException("Unsupported RDBMS");
         }
