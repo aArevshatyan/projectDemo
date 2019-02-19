@@ -31,6 +31,7 @@ public class MigrationController {
     public MigrationController(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
+
     @PostMapping("/clear")
     public ResponseEntity<?> clear() {
         UnsupportedFeatures.emptyList();
@@ -45,13 +46,14 @@ public class MigrationController {
 
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/err")
     public ResponseEntity<?> prepare() {
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
         executorService.submit(() -> {
             try {
                 preparation(sessionId);
-            } catch (SQLException e) {
+            } catch (SQLException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
@@ -64,14 +66,14 @@ public class MigrationController {
         executorService.submit(() -> {
             try {
                 migration(sessionId);
-            } catch (SQLException e) {
+            } catch (SQLException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
         return ResponseEntity.ok().build();
     }
 
-    private void migration(String sessionId) throws SQLException {
+    private void migration(String sessionId) throws SQLException, InterruptedException {
 
         Connection connection = DriverManager.getConnection(
                 MigrationData.urlTo,
@@ -80,6 +82,7 @@ public class MigrationController {
         );
 
         Statement statement = connection.createStatement();
+        Thread.sleep(600);
 
         for (String s : GeneratedCreateSQLs.getCreateSQLs()) {
             statement.addBatch(s);
@@ -87,7 +90,7 @@ public class MigrationController {
         statement.executeBatch();
         statement.clearBatch();
         messagingTemplate.convertAndSend("/message/" + sessionId, "Skeleton created");
-
+        Thread.sleep(600);
         for (String s : GeneratedPrimarySQLs.getPrimarySQLs()) {
             System.out.println(s);
             statement.addBatch(s);
@@ -95,6 +98,7 @@ public class MigrationController {
         statement.executeBatch();
         statement.clearBatch();
         messagingTemplate.convertAndSend("/message/" + sessionId, "Primary keys set");
+        Thread.sleep(600);
 
         for (String s : GeneratedInsertSQLs.getGeneratedInsertSQLs()) {
             statement.addBatch(s);
@@ -103,6 +107,7 @@ public class MigrationController {
         statement.clearBatch();
         messagingTemplate.convertAndSend("/message/" + sessionId, rows.length + " rows inserted");
         messagingTemplate.convertAndSend("/message/" + sessionId, "Data inserted");
+        Thread.sleep(600);
 
         for (String s : GeneratedForeignSQls.getForeignSQLs()) {
             statement.addBatch(s);
@@ -110,14 +115,18 @@ public class MigrationController {
         statement.executeBatch();
         statement.clearBatch();
         messagingTemplate.convertAndSend("/message/" + sessionId, "Foreign keys set");
+        Thread.sleep(600);
+
+        messagingTemplate.convertAndSend("/message/" + sessionId, "MIGRATION DONE SUCCESSFULLY");
 
         messagingTemplate.convertAndSend("/message/" + sessionId, "done");
     }
 
-    private void preparation(String sessionId) throws SQLException {
+    private void preparation(String sessionId) throws SQLException, InterruptedException {
         List<String> strings = SchemaAnalyzer.generateSqls();
         for (String s : strings) {
             messagingTemplate.convertAndSend("/message/" + sessionId, "Warning: " + s);
+            Thread.sleep(800);
         }
         messagingTemplate.convertAndSend("/message/" + sessionId, "done");
 
