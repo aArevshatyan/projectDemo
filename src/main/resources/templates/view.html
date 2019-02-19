@@ -1,6 +1,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Migration</title>
+    <link th:href="@{/css/view.css}" rel="stylesheet"/>
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -10,36 +11,51 @@
 </head>
 
 <body th:onload="'init(\'' + ${sessionId} + '\')'">
-<h1>Table's name page</h1>
-<div class="checks" th:each="table: ${tables}">
-    <input name="checkik" type="checkbox" th:attr="value=${table.name}" th:text="${table.name}"/>
+<div class="container center">
+   <div class="grid">
+    <div class="left">
+        <h3>Tables' names</h3>
+        <div th:each="table: ${tables}">
+            <label>
+                <input name="checkik" type="checkbox" th:attr="value=${table.name}" th:text="${table.name}"/>
+            </label>
+        </div>
+    </div>
+    <div class="right">
+        <h3>Please enter your source db details</h3>
+        <br/>
+        <div>
+            <!--TODO remove hardcoded values-->
+            <input id="urlTo" type="text" placeholder="URL To" name="urlTo" value="jdbc:mysql://localhost:3306/test2"/>
+            <input id="usernameTo" type="text" placeholder="Username" name="usernameTo" value="root"/>
+            <input id="passwordTo" type="password" placeholder="Password" name="passwordTo" value="root"/>
+        </div>
+    </div>
+   </div>
+    <div class="message buttons">
+        <div class="btn-wrapper">
+            <button id="prepMigrate" class="button" onclick="generateSqls()">Prepare to migration</button>
+        </div>
+    </div>
+
+    <div id="err" class="socket" style="border: 1px solid; width: 800px; height: 200px;  overflow: scroll;">
+        <ul id="errors">
+
+        </ul>
+    </div>
+
+    <div class="message buttons">
+        <div class="btn-wrapper">
+            <button id="btnMigrate" class="button" onclick="migrate()">Migrate</button>
+        </div>
+    </div>
+
+    <div id="load"  class="socket"  style="border: 1px solid; width: 800px; height: 200px;  overflow: scroll;">
+        <ul id="loading">
+
+        </ul>
+    </div>
 </div>
-<br/>
-<div class="form form--from">
-    <div class="form--heading">Please enter your source db details</div>
-    <!--TODO remove hardcoded values-->
-    <input id="urlTo" type="text" placeholder="URL To" name="urlTo" value="jdbc:postgresql://localhost:5432/test2"/>
-    <input id="usernameTo" type="text" placeholder="Username" name="usernameTo" value="postgres"/>
-    <input id="passwordTo" type="password" placeholder="Password" name="passwordTo" value="root"/>
-</div>
-<br/>
-
-<button id="prepMigrate" onclick="generateSqls()">Prepare to migration</button>
-
-<div id="err" style="border: 1px solid; width: 1024px; height: 200px;">
-    <ul id="errors">
-
-    </ul>
-</div>
-
-<button id="btnMigrate"  onclick="migrate()">Migrate</button>
-
-<div id="load" style="border: 1px solid; width: 1024px; height: 200px;">
-    <ul id="loading">
-
-    </ul>
-</div>
-
 <script th:src="@{/js/view.js}"></script>
 
 </body>

@@ -10,16 +10,14 @@ import java.util.concurrent.ExecutorService;
 
 import am.aca.dbmigration.sql.MigrationData;
 import am.aca.dbmigration.sql.SchemaAnalyzer;
+import am.aca.dbmigration.sql.generatedSQLs.*;
+import am.aca.dbmigration.sql.tables.Table;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedCreateSQLs;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedInsertSQLs;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedForeignSQls;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedPrimarySQLs;
 import org.springframework.web.context.request.RequestContextHolder;
 
 @SessionScope
@@ -33,7 +31,20 @@ public class MigrationController {
     public MigrationController(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
+    @PostMapping("/clear")
+    public ResponseEntity<?> clear() {
+        UnsupportedFeatures.emptyList();
+        GeneratedCreateSQLs.emptyList();
+        GeneratedPrimarySQLs.emptyList();
+        GeneratedForeignSQls.emptyList();
+        GeneratedInsertSQLs.emptyList();
 
+        for (Table table : MigrationData.schemaFrom.getTables()) {
+            table.setEnabled(false);
+        }
+
+        return ResponseEntity.ok().build();
+    }
     @PostMapping("/err")
     public ResponseEntity<?> prepare() {
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
@@ -62,7 +73,6 @@ public class MigrationController {
 
     private void migration(String sessionId) throws SQLException {
 
-
         Connection connection = DriverManager.getConnection(
                 MigrationData.urlTo,
                 MigrationData.usernameTo,
@@ -79,6 +89,7 @@ public class MigrationController {
         messagingTemplate.convertAndSend("/message/" + sessionId, "Skeleton created");
 
         for (String s : GeneratedPrimarySQLs.getPrimarySQLs()) {
+            System.out.println(s);
             statement.addBatch(s);
         }
         statement.executeBatch();
@@ -88,8 +99,9 @@ public class MigrationController {
         for (String s : GeneratedInsertSQLs.getGeneratedInsertSQLs()) {
             statement.addBatch(s);
         }
-        statement.executeBatch();
+        int[] rows = statement.executeBatch();
         statement.clearBatch();
+        messagingTemplate.convertAndSend("/message/" + sessionId, rows.length + " rows inserted");
         messagingTemplate.convertAndSend("/message/" + sessionId, "Data inserted");
 
         for (String s : GeneratedForeignSQls.getForeignSQLs()) {
@@ -104,7 +116,6 @@ public class MigrationController {
 
     private void preparation(String sessionId) throws SQLException {
         List<String> strings = SchemaAnalyzer.generateSqls();
-        messagingTemplate.convertAndSend("/message/" + sessionId, "Warning: " + "Indexes aren't supported");
         for (String s : strings) {
             messagingTemplate.convertAndSend("/message/" + sessionId, "Warning: " + s);
         }

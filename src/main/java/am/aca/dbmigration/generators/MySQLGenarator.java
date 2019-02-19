@@ -1,18 +1,14 @@
 package am.aca.dbmigration.generators;
 
-import java.sql.*;
-
 import am.aca.dbmigration.sql.Schema;
+import am.aca.dbmigration.sql.generatedSQLs.*;
 import am.aca.dbmigration.sql.tables.MySQLTable;
-import am.aca.dbmigration.sql.generatedSQLs.UnsupportedFeatures;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedCreateSQLs;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedForeignSQls;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedPrimarySQLs;
 
 public class MySQLGenarator implements Generator<MySQLTable> {
 
     @Override
-    public void generateSQLOf(Schema<MySQLTable> schema) throws SQLException {
+    public void generateSQLOf(Schema<MySQLTable> schema) {
+
 
         StringBuilder sql = new StringBuilder();
 
@@ -111,6 +107,7 @@ public class MySQLGenarator implements Generator<MySQLTable> {
                                         }
                                     });
                 });
+        UnsupportedFeatures.add("Indexes aren't supported");
 
 
     }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 
+import am.aca.dbmigration.sql.generatedSQLs.*;
 import am.aca.dbmigration.sql.tables.Table;
 import am.aca.dbmigration.sql.MigrationData;
 import am.aca.dbmigration.sql.SchemaAnalyzer;
@@ -42,6 +43,7 @@ public class DbWorkController {
         return modelAndView;
     }
 
+
     @PostMapping("/prepare")
     public ResponseEntity<?> prepareSqls(HttpServletRequest httpServletRequest) {
         MigrationData.urlTo = httpServletRequest.getParameter("urlTo");
@@ -49,6 +51,8 @@ public class DbWorkController {
         MigrationData.passwordTo = httpServletRequest.getParameter("passwordTo");
         String checkedTables = httpServletRequest.getParameter("checkedTables");
         SchemaAnalyzer.setEnabled(checkedTables);
+
         return ResponseEntity.ok().build();
     }
+
 }

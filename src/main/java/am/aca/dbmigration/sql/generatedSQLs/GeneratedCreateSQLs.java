@@ -18,4 +18,8 @@ public class GeneratedCreateSQLs {
     public static void add(String s) {
         createSQLs.add(s);
     }
+
+    public static void emptyList() {
+        createSQLs= new ArrayList<>();
+    }
 }

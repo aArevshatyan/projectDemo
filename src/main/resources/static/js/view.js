@@ -21,6 +21,7 @@ function init(sessionId) {
 }
 
 function migrate() {
+
     $('#btnMigrate').prop('disabled', true);
     $.ajax('/migrate/migr', {
         method: 'POST'
@@ -29,8 +30,15 @@ function migrate() {
 
 
 function generateSqls() {
+
     $('#prepMigrate').prop('disabled', true);
     $('#btnMigrate').prop('disabled', true);
+    $('#errors').empty();
+    $('#loading').empty();
+    $.ajax('migrate/clear', {
+        method: 'POST',
+    });
+
     var checkedTables = "";
     $('input[name="checkik"]:checked').each(function (i, item) {
         checkedTables += ($(item).prop("value"));

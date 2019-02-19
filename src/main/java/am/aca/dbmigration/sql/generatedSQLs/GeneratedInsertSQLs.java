@@ -19,5 +19,7 @@ public class GeneratedInsertSQLs {
         return insertSQLs;
     }
 
-
+    public static void emptyList() {
+        insertSQLs = new ArrayList<>();
+    }
 }

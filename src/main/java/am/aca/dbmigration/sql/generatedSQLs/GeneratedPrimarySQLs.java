@@ -9,13 +9,17 @@ import org.springframework.web.context.annotation.SessionScope;
 @Component
 @SessionScope
 public class GeneratedPrimarySQLs {
-    private static List<String > primarySQLs = new ArrayList<>();
+    private static List<String> primarySQLs = new ArrayList<>();
 
-    public static void add (String s){
+    public static void add(String s) {
         primarySQLs.add(s);
     }
 
     public static List<String> getPrimarySQLs() {
         return primarySQLs;
+    }
+
+    public static void emptyList() {
+        primarySQLs= new ArrayList<>();
     }
 }

@@ -18,4 +18,6 @@ public class UnsupportedFeatures {
     public static void add(String s) {
         unsupportedFeatures.add(s);
     }
+
+    public static void emptyList() { unsupportedFeatures = new ArrayList<>(); }
 }

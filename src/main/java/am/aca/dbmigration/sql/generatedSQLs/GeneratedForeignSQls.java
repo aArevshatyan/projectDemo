@@ -9,13 +9,18 @@ import org.springframework.web.context.annotation.SessionScope;
 @Component
 @SessionScope
 public class GeneratedForeignSQls {
-    private static List<String > foreignSQLs = new ArrayList<>();
+    private static List<String> foreignSQLs = new ArrayList<>();
 
     public static List<String> getForeignSQLs() {
         return foreignSQLs;
     }
 
-    public static void add (String s){
+    public static void add(String s) {
         foreignSQLs.add(s);
+    }
+
+    public static void emptyList() {
+        foreignSQLs = new ArrayList<>();
+
     }
 }

@@ -37,7 +37,10 @@ public class SchemaAnalyzer {
 
     public static List<String> generateSqls() throws SQLException {
 
-        MigrationData.schemaTo = ConverterFactory.getConverter(MigrationData.urlFrom, MigrationData.urlTo).convert(MigrationData.schemaFrom);
+        MigrationData.schemaTo =
+                ConverterFactory
+                .getConverter(MigrationData.urlFrom, MigrationData.urlTo)
+                        .convert(MigrationData.schemaFrom);
         GeneratorFactory
                 .getGenerator(MigrationData.urlTo)
                 .generateSQLOf(MigrationData.schemaTo);

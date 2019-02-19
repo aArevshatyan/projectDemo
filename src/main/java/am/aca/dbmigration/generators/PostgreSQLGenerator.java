@@ -1,20 +1,18 @@
 package am.aca.dbmigration.generators;
 
-import java.sql.*;
-
 import am.aca.dbmigration.sql.Schema;
-import am.aca.dbmigration.sql.tables.PostgreSQLTable;
 import am.aca.dbmigration.sql.constraints.PostgreSQLConstraint;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedCreateSQLs;
-import am.aca.dbmigration.sql.generatedSQLs.UnsupportedFeatures;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedPrimarySQLs;
-import am.aca.dbmigration.sql.generatedSQLs.GeneratedForeignSQls;
+import am.aca.dbmigration.sql.generatedSQLs.*;
+import am.aca.dbmigration.sql.tables.PostgreSQLTable;
+import com.sun.javafx.iio.gif.GIFDescriptor;
 
 public class PostgreSQLGenerator implements Generator<PostgreSQLTable> {
 
-
     @Override
-    public void generateSQLOf(Schema<PostgreSQLTable> schema) throws SQLException {
+    public void generateSQLOf(Schema<PostgreSQLTable> schema) {
+
+
+
         schema
                 .getTables()
                 .stream()
@@ -107,6 +105,7 @@ public class PostgreSQLGenerator implements Generator<PostgreSQLTable> {
                                 }
                             });
                 });
+        UnsupportedFeatures.add("Indexes aren't supported");
 
     }
 }

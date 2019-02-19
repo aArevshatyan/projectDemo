@@ -2,7 +2,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>DBmigration home page</title>
-    <link href="../static/css/index.css" th:href="@{/css/index.css}" rel="stylesheet"/>
+    <link th:href="@{/css/index.css}" rel="stylesheet"/>
 
 </head>
 <body>
@@ -11,8 +11,8 @@
         <div class="form form--from">
             <div class="form--heading">Please enter your source db details</div>
             <!--TODO remove hardcoded values-->
-            <input type="text" placeholder="URL From" name="urlFrom" value="jdbc:mysql://localhost:3306/test2"/>
-            <input type="text" placeholder="Username" name="usernameFrom" value="root"/>
+            <input type="text" placeholder="URL From" name="urlFrom" value="jdbc:postgresql://localhost:5432/test2"/>
+            <input type="text" placeholder="Username" name="usernameFrom" value="postgres"/>
             <input type="password" placeholder="Password" name="passwordFrom" value="root"/>
         </div>
         <div class="message buttons">
