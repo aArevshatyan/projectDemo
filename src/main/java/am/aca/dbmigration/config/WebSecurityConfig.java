@@ -7,6 +7,10 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/**
+ * Web security config for extracting session ID
+ */
+
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 

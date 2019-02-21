@@ -7,7 +7,9 @@ import am.aca.dbmigration.sql.utils.Nullable;
 import am.aca.dbmigration.sql.tables.PostgreSQLTable;
 import am.aca.dbmigration.sql.columns.PostgreSQLColumn;
 import am.aca.dbmigration.sql.constraints.PostgreSQLConstraint;
-
+/**
+ * PostgreSQL type Analyzer
+ */
 public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
 
     private Connection connection;
@@ -20,7 +22,11 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
         this.username = username;
         this.password = password;
     }
-
+    /**
+     * @return PostgreSQL type schema
+     * @throws SQLException
+     * @see DDLAnalyzer#getSchema()
+     */
     @Override
     public Schema<PostgreSQLTable> getSchema() throws SQLException {
 
@@ -36,7 +42,14 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
         return schema;
 
     }
-
+    /**
+     * By source database connection it selects the tables from
+     * information schema in database and creates Table object
+     * that is added to schema
+     *
+     * @param schema in which are added tables
+     * @throws SQLException
+     */
     private void getTablesFromDB(Schema<PostgreSQLTable> schema) throws SQLException {
 
         String showTablesSql =
@@ -54,7 +67,14 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
         }
 
     }
-
+    /**
+     * By source database connection it selects the passed tables's
+     * columns from information schema in database and creates Column object
+     * that is added to table
+     *
+     * @param table in which are added columns
+     * @throws SQLException
+     */
     private void getColumnsFromDb(PostgreSQLTable table) throws SQLException {
 
         PreparedStatement showColumnsStatement = connection.prepareStatement(
@@ -82,7 +102,14 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
             );
         }
     }
-
+    /**
+     * By source database connection it selects the passed tables's
+     * constraints from information schema in database and creates
+     * Constraint object that is added to table
+     *
+     * @param table in which are added columns
+     * @throws SQLException
+     */
     private void getConstraintsFromDb(PostgreSQLTable table) throws SQLException {
         PreparedStatement showFkeysStatement = connection.prepareStatement(
                 "SELECT  TC.CONSTRAINT_NAME, TC.CONSTRAINT_TYPE, TC.TABLE_NAME, KCU.COLUMN_NAME,  CCU.TABLE_NAME, CCU.COLUMN_NAME " +

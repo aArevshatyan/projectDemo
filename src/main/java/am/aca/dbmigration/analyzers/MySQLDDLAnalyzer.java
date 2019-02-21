@@ -9,6 +9,9 @@ import am.aca.dbmigration.sql.utils.JdbcUrlHelper;
 import am.aca.dbmigration.sql.columns.MySQLColumn;
 import am.aca.dbmigration.sql.constraints.MySQLConstraint;
 
+/**
+ * MySQL type Analyzer
+ */
 public class MySQLDDLAnalyzer implements DDLAnalyzer<MySQLTable> {
 
     private Connection connection;
@@ -22,6 +25,11 @@ public class MySQLDDLAnalyzer implements DDLAnalyzer<MySQLTable> {
         this.password = password;
     }
 
+    /**
+     * @return MySql type schema
+     * @throws SQLException
+     * @see DDLAnalyzer#getSchema()
+     */
     @Override
     public Schema<MySQLTable> getSchema() throws SQLException {
 
@@ -32,12 +40,20 @@ public class MySQLDDLAnalyzer implements DDLAnalyzer<MySQLTable> {
         );
 
         Schema<MySQLTable> schema = new Schema<>();
-        getTablesFromDB(url, schema);
+        getTablesFromDB( schema);
 
         return schema;
     }
 
-    private void getTablesFromDB(String url, Schema<MySQLTable> schema) throws SQLException {
+    /**
+     * By source database connection it selects the tables from
+     * information schema in database and creates Table object
+     * that is added to schema
+     *
+     * @param schema in which are added tables
+     * @throws SQLException
+     */
+    private void getTablesFromDB( Schema<MySQLTable> schema) throws SQLException {
 
         String dbName = JdbcUrlHelper.getDbName(url);
 
@@ -57,6 +73,14 @@ public class MySQLDDLAnalyzer implements DDLAnalyzer<MySQLTable> {
 
     }
 
+    /**
+     * By source database connection it selects the passed tables's
+     * columns from information schema in database and creates Column object
+     * that is added to table
+     *
+     * @param table in which are added columns
+     * @throws SQLException
+     */
     private void getColumnsFromDb(MySQLTable table) throws SQLException {
 
         PreparedStatement showColumnsStatement = connection.prepareStatement(
@@ -84,6 +108,14 @@ public class MySQLDDLAnalyzer implements DDLAnalyzer<MySQLTable> {
         }
     }
 
+    /**
+     * By source database connection it selects the passed tables's
+     * constraints from information schema in database and creates
+     * Constraint object that is added to table
+     *
+     * @param table in which are added columns
+     * @throws SQLException
+     */
     private void getConstraintsFromDb(MySQLTable table) throws SQLException {
         PreparedStatement showFkeysStatement = connection.prepareStatement(
                 "SELECT  K.CONSTRAINT_NAME, C.CONSTRAINT_TYPE, K.TABLE_NAME, K.COLUMN_NAME,   K.REFERENCED_TABLE_NAME,  K.REFERENCED_COLUMN_NAME " +

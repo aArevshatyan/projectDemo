@@ -13,6 +13,10 @@ import org.springframework.web.socket.config.annotation.WebSocketTransportRegist
 import org.springframework.messaging.handler.invocation.HandlerMethodReturnValueHandler;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+/**
+ * Web socket config for dynamic messaging during server work
+ */
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
