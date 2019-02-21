@@ -10,10 +10,13 @@
     <div class="container">
         <div class="form form--from">
             <div class="form--heading">Please enter your source db details</div>
-            <!--TODO remove hardcoded values-->
-            <input type="text" placeholder="URL From" name="urlFrom" value="jdbc:postgresql://localhost:5432/test2"/>
-            <input type="text" placeholder="Username" name="usernameFrom" value="postgres"/>
-            <input type="password" placeholder="Password" name="passwordFrom" value="root"/>
+            <input type="text" placeholder="URL From" name="urlFrom"/>
+            <input type="text" placeholder="Username" name="usernameFrom"/>
+            <input type="password" placeholder="Password" name="passwordFrom"/>
+            <br/>
+            <br/>
+            <h4 style=" color: darkred; font-weight: bold; font-family: 'Playfair Display', serif;"
+                th:text="${testMsg}"></h4>
         </div>
         <div class="message buttons">
             <div class="btn-wrapper">

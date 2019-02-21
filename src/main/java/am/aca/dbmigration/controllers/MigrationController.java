@@ -53,6 +53,7 @@ public class MigrationController {
         executorService.submit(() -> {
             try {
                 preparation(sessionId);
+
             } catch (SQLException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -92,7 +93,6 @@ public class MigrationController {
         messagingTemplate.convertAndSend("/message/" + sessionId, "Skeleton created");
         Thread.sleep(600);
         for (String s : GeneratedPrimarySQLs.getPrimarySQLs()) {
-            System.out.println(s);
             statement.addBatch(s);
         }
         statement.executeBatch();

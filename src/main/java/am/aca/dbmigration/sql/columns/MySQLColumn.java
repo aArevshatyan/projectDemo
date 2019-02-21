@@ -32,7 +32,7 @@ public class MySQLColumn {
 
         this.type = dataType +
                 ((characterMaximumLength != 0 ) ? (
-                        "(" + (characterMaximumLength-1) + ")"
+                        "(" + (characterMaximumLength) + ")"
                 ) : "") +
                 ((numericPrecision != 0 && numericPrecision != 32) ?
                         ("(" + numericPrecision + "" +

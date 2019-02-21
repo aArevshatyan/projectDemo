@@ -1,5 +1,8 @@
 package am.aca.dbmigration.controllers;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
 import java.util.List;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +11,7 @@ import am.aca.dbmigration.sql.generatedSQLs.*;
 import am.aca.dbmigration.sql.tables.Table;
 import am.aca.dbmigration.sql.MigrationData;
 import am.aca.dbmigration.sql.SchemaAnalyzer;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
@@ -31,7 +35,11 @@ public class DbWorkController {
         MigrationData.urlFrom = httpServletRequest.getParameter("urlFrom");
         MigrationData.usernameFrom = httpServletRequest.getParameter("usernameFrom");
         MigrationData.passwordFrom = httpServletRequest.getParameter("passwordFrom");
-        return new ModelAndView("redirect:/schema");
+
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("testMsg","Please input correct database info");
+
+        return (testConnection("from")) ? new ModelAndView("redirect:/schema") : modelAndView;
     }
 
     @GetMapping("/schema")
@@ -55,4 +63,36 @@ public class DbWorkController {
         return ResponseEntity.ok().build();
     }
 
+
+
+    private boolean testConnection(String s) {
+        switch (s) {
+            case "from": {
+                try {
+                    DriverManager.getConnection(
+                            MigrationData.urlFrom,
+                            MigrationData.usernameFrom,
+                            MigrationData.passwordFrom
+                    );
+                } catch (SQLException e) {
+                    return false;
+                }
+                return true;
+            }
+            case "to": {
+                try {
+                    DriverManager.getConnection(
+                            MigrationData.urlTo,
+                            MigrationData.usernameTo,
+                            MigrationData.passwordTo
+                    );
+                } catch (SQLException e) {
+                    return false;
+                }
+                return true;
+            }
+            default:
+                return false;
+        }
+    }
 }
