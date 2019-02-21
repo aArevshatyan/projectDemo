@@ -1,9 +1,10 @@
 package am.aca.dbmigration.analyzers;
 
-import java.sql.SQLException;
-
 import am.aca.dbmigration.sql.Schema;
 import am.aca.dbmigration.sql.tables.Table;
+
+import java.sql.SQLException;
+
 
 /**
  * @param <T> Source database type

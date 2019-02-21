@@ -1,11 +1,14 @@
 package am.aca.dbmigration.sql.generatedSQLs;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Primary key setting queries
+ */
 @Component
 @SessionScope
 public class GeneratedPrimarySQLs {
@@ -20,6 +23,6 @@ public class GeneratedPrimarySQLs {
     }
 
     public static void emptyList() {
-        primarySQLs= new ArrayList<>();
+        primarySQLs = new ArrayList<>();
     }
 }

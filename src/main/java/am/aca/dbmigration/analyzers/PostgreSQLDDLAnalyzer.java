@@ -1,12 +1,13 @@
 package am.aca.dbmigration.analyzers;
 
-import java.sql.*;
-
 import am.aca.dbmigration.sql.Schema;
-import am.aca.dbmigration.sql.utils.Nullable;
-import am.aca.dbmigration.sql.tables.PostgreSQLTable;
 import am.aca.dbmigration.sql.columns.PostgreSQLColumn;
 import am.aca.dbmigration.sql.constraints.PostgreSQLConstraint;
+import am.aca.dbmigration.sql.tables.PostgreSQLTable;
+import am.aca.dbmigration.sql.utils.Nullable;
+
+import java.sql.*;
+
 /**
  * PostgreSQL type Analyzer
  */
@@ -22,6 +23,7 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
         this.username = username;
         this.password = password;
     }
+
     /**
      * @return PostgreSQL type schema
      * @throws SQLException
@@ -42,6 +44,7 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
         return schema;
 
     }
+
     /**
      * By source database connection it selects the tables from
      * information schema in database and creates Table object
@@ -60,13 +63,17 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
         ResultSet resultSet = showTablesStatement.executeQuery(showTablesSql);
 
         while (resultSet.next()) {
-            PostgreSQLTable table = new PostgreSQLTable(resultSet.getString(1), resultSet.getString(2));
+            PostgreSQLTable table = new PostgreSQLTable(
+                    resultSet.getString(1),
+                    resultSet.getString(2)
+            );
             getColumnsFromDb(table);
             getConstraintsFromDb(table);
             schema.addTable(table);
         }
 
     }
+
     /**
      * By source database connection it selects the passed tables's
      * columns from information schema in database and creates Column object
@@ -102,6 +109,7 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
             );
         }
     }
+
     /**
      * By source database connection it selects the passed tables's
      * constraints from information schema in database and creates
@@ -112,7 +120,8 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
      */
     private void getConstraintsFromDb(PostgreSQLTable table) throws SQLException {
         PreparedStatement showFkeysStatement = connection.prepareStatement(
-                "SELECT  TC.CONSTRAINT_NAME, TC.CONSTRAINT_TYPE, TC.TABLE_NAME, KCU.COLUMN_NAME,  CCU.TABLE_NAME, CCU.COLUMN_NAME " +
+                "SELECT  TC.CONSTRAINT_NAME, TC.CONSTRAINT_TYPE, TC.TABLE_NAME," +
+                        " KCU.COLUMN_NAME,  CCU.TABLE_NAME, CCU.COLUMN_NAME " +
                         " FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TC " +
                         " JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KCU" +
                         " ON TC.CONSTRAINT_NAME = KCU.CONSTRAINT_NAME" +

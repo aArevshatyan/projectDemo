@@ -1,8 +1,12 @@
 package am.aca.dbmigration.sql.utils;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Holds the equal types of different type of RDBMSs'
+ * helps in conversion process
+ */
 public enum Type {
 
     INT("INT", "INT"),

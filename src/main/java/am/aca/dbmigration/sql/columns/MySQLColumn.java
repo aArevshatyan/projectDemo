@@ -2,6 +2,9 @@ package am.aca.dbmigration.sql.columns;
 
 import am.aca.dbmigration.sql.utils.Nullable;
 
+/**
+ * Holds information about MySql column
+ */
 public class MySQLColumn {
 
     private String name;
@@ -31,7 +34,7 @@ public class MySQLColumn {
 
 
         this.type = dataType +
-                ((characterMaximumLength != 0 ) ? (
+                ((characterMaximumLength != 0) ? (
                         "(" + (characterMaximumLength) + ")"
                 ) : "") +
                 ((numericPrecision != 0 && numericPrecision != 32) ?

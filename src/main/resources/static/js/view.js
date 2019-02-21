@@ -12,7 +12,7 @@ function init(sessionId) {
                 var str = data.body;
                 if (str.includes("Warning: ")) {
                     $("#err ul").append($("<li>").text(data.body));
-                } else if(str.includes("MIGRATION DONE SUCCESSFULLY")) {
+                } else if (str.includes("MIGRATION DONE SUCCESSFULLY")) {
                     $("#load ul").append($("<li>").text(data.body)).addClass("success");
                 } else {
                     $("#load ul").append($("<li>").text(data.body));
@@ -25,6 +25,7 @@ function init(sessionId) {
 function migrate() {
     $('#prepMigrate').prop('disabled', true);
     $('#btnMigrate').prop('disabled', true);
+
     $.ajax('/migrate/migr', {
         method: 'POST'
     });
@@ -54,11 +55,19 @@ function generateSqls() {
 
     $.ajax('/prepare', {
         method: 'POST',
-        data: myKeyVals
+        data: myKeyVals,
+        success: function () {
+            $.ajax('/migrate/err', {
+                method: 'POST',
+            });
+        },
+        error: function () {
+            $('#btnMigrate').prop('disabled', false);
+            $('#prepMigrate').prop('disabled', false);
+            alert("Input valid database information");
+        }
     });
 
-    $.ajax('/migrate/err', {
-        method: 'POST',
-    });
+
 }
 

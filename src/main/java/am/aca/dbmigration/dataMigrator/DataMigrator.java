@@ -1,12 +1,18 @@
 package am.aca.dbmigration.dataMigrator;
 
-import java.sql.*;
-import java.util.*;
-
 import am.aca.dbmigration.sql.Schema;
-import am.aca.dbmigration.sql.tables.Table;
 import am.aca.dbmigration.sql.generatedSQLs.GeneratedInsertSQLs;
+import am.aca.dbmigration.sql.tables.Table;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * It's responsible for filling and generating of queries.
+ *
+ * @param <T> destination database type
+ */
 public class DataMigrator<T> {
 
     private String urlFrom;
@@ -20,6 +26,12 @@ public class DataMigrator<T> {
         this.passwordFrom = passwordFrom;
     }
 
+    /**
+     * Based on generated source schema it selects data from database
+     * stores it in list then generate insert queries for destination database
+     *
+     * @param schemaFrom is generated schema of source database
+     */
     public void generateMigrationSQL(Schema<Table> schemaFrom) {
 
         schemaFrom

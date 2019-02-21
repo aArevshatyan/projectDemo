@@ -1,13 +1,16 @@
 package am.aca.dbmigration.sql.tables;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
 import am.aca.dbmigration.sql.columns.PostgreSQLColumn;
 import am.aca.dbmigration.sql.constraints.PostgreSQLConstraint;
 
-public class PostgreSQLTable implements Table{
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * PostgreSQL type table
+ */
+public class PostgreSQLTable implements Table {
 
     private String name;
     private String type;
@@ -23,7 +26,9 @@ public class PostgreSQLTable implements Table{
         this.constraints = new ArrayList<>();
     }
 
-
+    /**
+     * @return list of PostgreSQL type primary key constraints
+     */
     public List<PostgreSQLConstraint> getConstraintByPrimaryKey() {
         List<PostgreSQLConstraint> constraintsByPK = new ArrayList<>();
         for (PostgreSQLConstraint mySQLConstraint : constraints) {
@@ -35,6 +40,9 @@ public class PostgreSQLTable implements Table{
         return constraintsByPK.stream().distinct().collect(Collectors.toList());
     }
 
+    /**
+     * @return list of PostgreSQL type foreign key constraints
+     */
     public List<PostgreSQLConstraint> getConstraintByForeignKey() {
         List<PostgreSQLConstraint> constraintsByFK = new ArrayList<>();
         for (PostgreSQLConstraint mySQLConstraint : constraints) {
@@ -53,6 +61,10 @@ public class PostgreSQLTable implements Table{
         this.constraints.add(constraint);
     }
 
+    /**
+     * @return list of PostgreSql type columns
+     * @see Table#getColumns()
+     */
     @Override
     public List<PostgreSQLColumn> getColumns() {
         return new ArrayList<>(columns);
@@ -87,11 +99,19 @@ public class PostgreSQLTable implements Table{
         this.type = type;
     }
 
+    /**
+     * @return if the table is selected by user for migration
+     * @see Table#isEnabled()
+     */
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * @param enabled user's choice about table migration
+     * @see Table#setEnabled(boolean)
+     */
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

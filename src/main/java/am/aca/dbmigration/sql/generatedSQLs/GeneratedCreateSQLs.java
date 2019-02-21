@@ -1,11 +1,14 @@
 package am.aca.dbmigration.sql.generatedSQLs;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * DDL creating queries
+ */
 @Component
 @SessionScope
 public class GeneratedCreateSQLs {
@@ -20,6 +23,6 @@ public class GeneratedCreateSQLs {
     }
 
     public static void emptyList() {
-        createSQLs= new ArrayList<>();
+        createSQLs = new ArrayList<>();
     }
 }

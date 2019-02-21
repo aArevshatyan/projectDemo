@@ -1,11 +1,15 @@
 package am.aca.dbmigration.sql.generatedSQLs;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Messages about not supported features
+ * and unable foreign keys
+ */
 @Component
 @SessionScope
 public class UnsupportedFeatures {
@@ -19,5 +23,7 @@ public class UnsupportedFeatures {
         unsupportedFeatures.add(s);
     }
 
-    public static void emptyList() { unsupportedFeatures = new ArrayList<>(); }
+    public static void emptyList() {
+        unsupportedFeatures = new ArrayList<>();
+    }
 }

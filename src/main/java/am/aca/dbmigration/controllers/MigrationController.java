@@ -1,25 +1,33 @@
 package am.aca.dbmigration.controllers;
 
-import java.util.List;
-import java.sql.Statement;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.DriverManager;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-
 import am.aca.dbmigration.sql.MigrationData;
 import am.aca.dbmigration.sql.SchemaAnalyzer;
 import am.aca.dbmigration.sql.generatedSQLs.*;
 import am.aca.dbmigration.sql.tables.Table;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+/**
+ * Controller for some processes during migration.
+ * It is responsible for clearing queries when needed,
+ * preparation process for migation,
+ * and finally the migration process
+ * All database long lasting processes are done by a single worker
+ * thread operating off an unbounded queue.
+ */
 @SessionScope
 @RestController
 @RequestMapping("/migrate")

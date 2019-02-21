@@ -1,13 +1,16 @@
 package am.aca.dbmigration.sql.tables;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-
 import am.aca.dbmigration.sql.columns.MySQLColumn;
 import am.aca.dbmigration.sql.constraints.MySQLConstraint;
 
-public class MySQLTable implements Table{
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * MySQL type table
+ */
+public class MySQLTable implements Table {
 
     private String name;
     private String type;
@@ -24,7 +27,9 @@ public class MySQLTable implements Table{
         this.constraints = new ArrayList<>();
     }
 
-
+    /**
+     * @return list of MySQL type primary key constraints
+     */
     public List<MySQLConstraint> getConstraintByPrimaryKey() {
         List<MySQLConstraint> constraintsByPK = new ArrayList<>();
         for (MySQLConstraint mySQLConstraint : constraints) {
@@ -36,6 +41,9 @@ public class MySQLTable implements Table{
         return constraintsByPK.stream().distinct().collect(Collectors.toList());
     }
 
+    /**
+     * @return list of MySQL type foreign key constraints
+     */
     public List<MySQLConstraint> getConstraintByForeignKey() {
         List<MySQLConstraint> constraintsByFK = new ArrayList<>();
         for (MySQLConstraint mySQLConstraint : constraints) {
@@ -55,6 +63,10 @@ public class MySQLTable implements Table{
         this.constraints.add(constraint);
     }
 
+    /**
+     * @return list of MySql type columns
+     * @see Table#getColumns()
+     */
     @Override
     public List<MySQLColumn> getColumns() {
         return new ArrayList<>(columns);
@@ -89,11 +101,19 @@ public class MySQLTable implements Table{
         this.type = type;
     }
 
+    /**
+     * @return if the table is selected by user for migration
+     * @see Table#isEnabled()
+     */
     @Override
     public boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * @param enabled user's choice about table migration
+     * @see Table#setEnabled(boolean)
+     */
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

@@ -1,11 +1,21 @@
 package am.aca.dbmigration.dataMigrator;
 
 import am.aca.dbmigration.sql.tables.MySQLTable;
-import am.aca.dbmigration.sql.utils.JdbcUrlHelper;
 import am.aca.dbmigration.sql.tables.PostgreSQLTable;
+import am.aca.dbmigration.sql.utils.JdbcUrlHelper;
+
 
 public class DataMigratorFactory {
 
+    /**
+     * Defines DataMigrator type by destination url
+     *
+     * @param urlFrom      of the source database
+     * @param urlTo        of the destination database
+     * @param usernameFrom of the source database
+     * @param passwordFrom of the source database
+     * @return
+     */
     public static DataMigrator getDataMigrator(String urlFrom, String urlTo, String usernameFrom, String passwordFrom) {
 
         String dbFrom = JdbcUrlHelper.getDbType(urlFrom);

@@ -1,5 +1,8 @@
 package am.aca.dbmigration.sql.constraints;
 
+/**
+ * Holds information about PostgreSQL constraints
+ */
 public class PostgreSQLConstraint {
 
     private String name;

@@ -1,11 +1,20 @@
 package am.aca.dbmigration.generators;
 
 import am.aca.dbmigration.sql.Schema;
-import am.aca.dbmigration.sql.generatedSQLs.*;
+import am.aca.dbmigration.sql.generatedSQLs.GeneratedCreateSQLs;
+import am.aca.dbmigration.sql.generatedSQLs.GeneratedForeignSQls;
+import am.aca.dbmigration.sql.generatedSQLs.GeneratedPrimarySQLs;
+import am.aca.dbmigration.sql.generatedSQLs.UnsupportedFeatures;
 import am.aca.dbmigration.sql.tables.MySQLTable;
 
+/**
+ * MySQL type Genarator
+ */
 public class MySQLGenarator implements Generator<MySQLTable> {
-
+    /**
+     * @param schema Destination database type schema
+     * @see Generator#generateSQLOf(Schema)
+     */
     @Override
     public void generateSQLOf(Schema<MySQLTable> schema) {
 

@@ -8,7 +8,7 @@ public class DDLAnalyzerFactory {
     /**
      * It takes the JDBC url extracts the database type and specifies the DDLAnalyzer
      *
-     * @param url is the JDBC url of source database
+     * @param url      is the JDBC url of source database
      * @param username of the source database
      * @param password of the source database
      * @return Specific type DDLAnalyzer based on source database information

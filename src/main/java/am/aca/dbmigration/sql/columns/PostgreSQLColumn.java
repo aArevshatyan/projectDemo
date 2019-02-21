@@ -2,6 +2,9 @@ package am.aca.dbmigration.sql.columns;
 
 import am.aca.dbmigration.sql.utils.Nullable;
 
+/**
+ * Holds information about PostgreSQL column
+ */
 public class PostgreSQLColumn {
 
 
@@ -32,7 +35,7 @@ public class PostgreSQLColumn {
         if (numericPrecision != 0 && numericPrecision != 32) dataType = "Numeric";
 
         this.type = dataType +
-                ((characterMaximumLength != 0 && characterMaximumLength != 65535 ) ?
+                ((characterMaximumLength != 0 && characterMaximumLength != 65535) ?
                         ("(" + (characterMaximumLength) + ")")
                         : "") +
                 ((numericPrecision != 0 && numericPrecision != 32) ?

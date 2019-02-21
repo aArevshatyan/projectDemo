@@ -1,24 +1,27 @@
 package am.aca.dbmigration.controllers;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.util.List;
-import java.sql.SQLException;
-import javax.servlet.http.HttpServletRequest;
-
-import am.aca.dbmigration.sql.generatedSQLs.*;
-import am.aca.dbmigration.sql.tables.Table;
 import am.aca.dbmigration.sql.MigrationData;
 import am.aca.dbmigration.sql.SchemaAnalyzer;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import am.aca.dbmigration.sql.tables.Table;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
+
+/**
+ * Controller for user's direct requests
+ * Responsible for storing user's input, checking validation,
+ * getting session id for unique listening to websocket
+ */
 @Controller
 @SessionScope
 public class DbWorkController {
@@ -29,6 +32,7 @@ public class DbWorkController {
         return new ModelAndView("index");
     }
 
+
     @PostMapping("/")
     public ModelAndView urlToInput(HttpServletRequest httpServletRequest) {
 
@@ -37,7 +41,7 @@ public class DbWorkController {
         MigrationData.passwordFrom = httpServletRequest.getParameter("passwordFrom");
 
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("testMsg","Please input correct database info");
+        modelAndView.addObject("testMsg", "Please input correct database info");
 
         return (testConnection("from")) ? new ModelAndView("redirect:/schema") : modelAndView;
     }
@@ -57,12 +61,15 @@ public class DbWorkController {
         MigrationData.urlTo = httpServletRequest.getParameter("urlTo");
         MigrationData.usernameTo = httpServletRequest.getParameter("usernameTo");
         MigrationData.passwordTo = httpServletRequest.getParameter("passwordTo");
-        String checkedTables = httpServletRequest.getParameter("checkedTables");
-        SchemaAnalyzer.setEnabled(checkedTables);
 
-        return ResponseEntity.ok().build();
+        if (testConnection("to")) {
+            String checkedTables = httpServletRequest.getParameter("checkedTables");
+            SchemaAnalyzer.setEnabled(checkedTables);
+            return ResponseEntity.ok().build();
+        } else {
+            return new ResponseEntity<>("invalid data", HttpStatus.BAD_REQUEST);
+        }
     }
-
 
 
     private boolean testConnection(String s) {
