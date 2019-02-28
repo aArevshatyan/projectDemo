@@ -48,6 +48,8 @@ public class MigrationController {
         GeneratedForeignSQls.emptyList();
         GeneratedInsertSQLs.emptyList();
 
+
+
         for (Table table : MigrationData.schemaFrom.getTables()) {
             table.setEnabled(false);
         }
@@ -94,6 +96,7 @@ public class MigrationController {
         Thread.sleep(600);
 
         for (String s : GeneratedCreateSQLs.getCreateSQLs()) {
+            System.out.println(s);
             statement.addBatch(s);
         }
         statement.executeBatch();
@@ -101,6 +104,7 @@ public class MigrationController {
         messagingTemplate.convertAndSend("/message/" + sessionId, "Skeleton created");
         Thread.sleep(600);
         for (String s : GeneratedPrimarySQLs.getPrimarySQLs()) {
+            System.out.println(s);
             statement.addBatch(s);
         }
         statement.executeBatch();
@@ -109,6 +113,7 @@ public class MigrationController {
         Thread.sleep(600);
 
         for (String s : GeneratedInsertSQLs.getGeneratedInsertSQLs()) {
+            System.out.println(s);
             statement.addBatch(s);
         }
         int[] rows = statement.executeBatch();
@@ -118,6 +123,7 @@ public class MigrationController {
         Thread.sleep(600);
 
         for (String s : GeneratedForeignSQls.getForeignSQLs()) {
+            System.out.println(s);
             statement.addBatch(s);
         }
         statement.executeBatch();
