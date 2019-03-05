@@ -40,6 +40,8 @@ public class DbWorkController {
         MigrationData.usernameFrom = httpServletRequest.getParameter("usernameFrom");
         MigrationData.passwordFrom = httpServletRequest.getParameter("passwordFrom");
 
+
+
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("testMsg", "Please input correct database info");
 
