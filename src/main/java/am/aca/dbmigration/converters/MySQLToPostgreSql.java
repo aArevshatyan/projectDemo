@@ -32,8 +32,10 @@ public class MySQLToPostgreSql implements Converter<MySQLTable, PostgreSQLTable>
             for (MySQLColumn columnFrom : tablefrom.getColumns()) {
                 PostgreSQLColumn columnTo = new PostgreSQLColumn(
                         columnFrom.getName(), columnFrom.getOrdinalPosition(), columnFrom.getDefaultValue(),
-                        columnFrom.getIsNullable(), Type.getDataType("mysql", "postgresql", columnFrom.getDataType().toUpperCase()), columnFrom.getCharacterMaximumLength(),
-                        columnFrom.getCharacterOctetLength(), columnFrom.getNumericPrecision(), columnFrom.getNumericScale()
+                        columnFrom.getIsNullable(), Type.getDataType("mysql", "postgresql",
+                        columnFrom.getDataType().toUpperCase()), columnFrom.getCharacterMaximumLength(),
+                        columnFrom.getCharacterOctetLength(), columnFrom.getNumericPrecision(),
+                        columnFrom.getNumericScale()
                 );
                 tableTo.addColumn(columnTo);
             }
@@ -47,9 +49,6 @@ public class MySQLToPostgreSql implements Converter<MySQLTable, PostgreSQLTable>
             }
             schemaTo.addTable(tableTo);
         }
-
         return schemaTo;
     }
-
-
 }

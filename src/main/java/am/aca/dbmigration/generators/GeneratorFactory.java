@@ -9,9 +9,7 @@ public class GeneratorFactory {
      * @return specific type Generator based on @param
      */
     public static Generator<? extends Table> getGenerator(String url) {
-
         String type = JdbcUrlHelper.getDbType(url);
-
         switch (type) {
             case "mysql":
                 return new MySQLGenarator();

@@ -15,7 +15,6 @@ import java.util.List;
  */
 public class SchemaAnalyzer {
 
-
     /**
      * It takes the source database information and by analyzing them creates a schema.
      *
@@ -25,14 +24,11 @@ public class SchemaAnalyzer {
      * @return list of source database type tables
      * @throws SQLException
      */
-    public static List<? extends Table> getSchema(String urlFrom, String usernameFrom, String passwordFrom)
+    public static void getSchema(String urlFrom, String usernameFrom, String passwordFrom)
             throws SQLException {
         MigrationData.schemaFrom = DDLAnalyzerFactory.
                 getAnalyzer(urlFrom, usernameFrom, passwordFrom)
                 .getSchema();
-
-        return MigrationData.schemaFrom.getTables();
-
     }
 
     /**
@@ -41,7 +37,6 @@ public class SchemaAnalyzer {
      * @param enabledTableNames user's selected table names
      */
     public static void setEnabled(String enabledTableNames) {
-
         String[] enabledTables = enabledTableNames.split(",");
         for (String enabledTable : enabledTables) {
             for (Table table : MigrationData.schemaFrom.getTables()) {
@@ -59,7 +54,6 @@ public class SchemaAnalyzer {
      * @throws SQLException
      */
     public static List<String> generateSqls() throws SQLException {
-
         MigrationData.schemaTo =
                 ConverterFactory
                         .getConverter(MigrationData.urlFrom, MigrationData.urlTo)
@@ -73,9 +67,6 @@ public class SchemaAnalyzer {
                 MigrationData.usernameFrom,
                 MigrationData.passwordFrom)
                 .generateMigrationSQL(MigrationData.schemaTo);
-
         return UnsupportedFeatures.getUnsupportedFeatures();
     }
-
-
 }

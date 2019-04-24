@@ -12,7 +12,6 @@ import java.sql.*;
  * PostgreSQL type Analyzer
  */
 public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
-
     private Connection connection;
     private String url;
     private String username;
@@ -37,12 +36,9 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
                 username,
                 password
         );
-
         Schema<PostgreSQLTable> schema = new Schema<>();
         getTablesFromDB(schema);
-
         return schema;
-
     }
 
     /**
@@ -61,7 +57,6 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
                         "WHERE TABLE_SCHEMA = 'public'";
         Statement showTablesStatement = connection.createStatement();
         ResultSet resultSet = showTablesStatement.executeQuery(showTablesSql);
-
         while (resultSet.next()) {
             PostgreSQLTable table = new PostgreSQLTable(
                     resultSet.getString(1),
@@ -71,7 +66,6 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
             getConstraintsFromDb(table);
             schema.addTable(table);
         }
-
     }
 
     /**
@@ -130,7 +124,6 @@ public class PostgreSQLDDLAnalyzer implements DDLAnalyzer<PostgreSQLTable> {
                         " ON CCU.CONSTRAINT_NAME = TC.CONSTRAINT_NAME" +
                         " AND CCU.TABLE_SCHEMA = TC.TABLE_SCHEMA" +
                         " WHERE TC.TABLE_NAME = ? ;");
-
         showFkeysStatement.setString(1, table.getName());
         ResultSet resultSet = showFkeysStatement.executeQuery();
         while (resultSet.next()) {

@@ -17,10 +17,7 @@ public class MySQLGenarator implements Generator<MySQLTable> {
      */
     @Override
     public void generateSQLOf(Schema<MySQLTable> schema) {
-
-
         StringBuilder sql = new StringBuilder();
-
         schema
                 .getTables()
                 .stream()
@@ -44,11 +41,9 @@ public class MySQLGenarator implements Generator<MySQLTable> {
                             );
                     sql.replace(sql.toString().lastIndexOf(","), sql.toString().lastIndexOf(",") + 1, "");
                     sql.append(");\n\n\n");
-
                     GeneratedCreateSQLs.add(sql.toString());
                     sql.setLength(0);
                 });
-
         schema
                 .getTables()
                 .stream()
@@ -68,11 +63,9 @@ public class MySQLGenarator implements Generator<MySQLTable> {
                             });
                     sql.replace(sql.toString().lastIndexOf(","), sql.toString().lastIndexOf(",") + 1, "");
                     sql.append(");\n\n\n");
-
                     GeneratedPrimarySQLs.add(sql.toString());
                     sql.setLength(0);
                 });
-
         schema
                 .getTables()
                 .stream()
@@ -117,7 +110,5 @@ public class MySQLGenarator implements Generator<MySQLTable> {
                                     });
                 });
         UnsupportedFeatures.add("Indexes aren't supported");
-
-
     }
 }

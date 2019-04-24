@@ -31,9 +31,7 @@ function migrate() {
     });
 }
 
-
 function generateSqls() {
-
     $('#prepMigrate').prop('disabled', true);
     $('#btnMigrate').prop('disabled', true);
     $('#errors').empty();
@@ -41,7 +39,6 @@ function generateSqls() {
     $.ajax('migrate/clear', {
         method: 'POST',
     });
-
     var checkedTables = "";
     $('input[name="checkik"]:checked').each(function (i, item) {
         checkedTables += ($(item).prop("value"));
@@ -50,9 +47,7 @@ function generateSqls() {
     var url = $('input[name="urlTo"]').val();
     var username = $('input[name="usernameTo"]').val();
     var password = $('input[name="passwordTo"]').val();
-
     var myKeyVals = {urlTo: url, usernameTo: username, passwordTo: password, checkedTables: checkedTables}
-
     $.ajax('/prepare', {
         method: 'POST',
         data: myKeyVals,
@@ -67,7 +62,4 @@ function generateSqls() {
             alert("Input valid database information");
         }
     });
-
-
 }
-

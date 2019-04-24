@@ -4,7 +4,6 @@ import am.aca.dbmigration.sql.tables.Table;
 import am.aca.dbmigration.sql.utils.JdbcUrlHelper;
 
 public class DDLAnalyzerFactory {
-
     /**
      * It takes the JDBC url extracts the database type and specifies the DDLAnalyzer
      *
@@ -26,6 +25,4 @@ public class DDLAnalyzerFactory {
                 throw new UnsupportedOperationException("Unsupported RDBMS");
         }
     }
-
 }
-

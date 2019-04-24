@@ -5,12 +5,10 @@ import am.aca.dbmigration.sql.tables.Table;
 
 import java.sql.SQLException;
 
-
 /**
  * @param <T> Source database type
  */
 public interface DDLAnalyzer<T extends Table> {
-
     /**
      * The function is analyzing source database's information schema.
      * Creates a schema, that contains list of tables of database.
@@ -21,5 +19,4 @@ public interface DDLAnalyzer<T extends Table> {
      * @throws SQLException
      */
     Schema<T> getSchema() throws SQLException;
-
 }

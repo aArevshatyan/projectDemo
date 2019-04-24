@@ -36,7 +36,6 @@ public class PostgreSQLTable implements Table {
                 constraintsByPK.add(mySQLConstraint);
             }
         }
-
         return constraintsByPK.stream().distinct().collect(Collectors.toList());
     }
 

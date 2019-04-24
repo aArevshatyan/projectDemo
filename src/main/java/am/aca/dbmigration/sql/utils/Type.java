@@ -40,7 +40,6 @@ public enum Type {
     BLOB("BYTEA", "BLOB"),
     TEXT("TEXT", "LONGTEXT"),;
 
-
     private static List<String> mysql;
     private static List<String> postgres;
 
@@ -76,12 +75,10 @@ public enum Type {
     }
 
     public static String getDataType(String from, String to, String myType) {
-
         List<String> fromList;
         List<String> toList;
         fromList = getStrings(from);
         toList = getStrings(to);
-
         for (int i = 0; i < fromList.size(); i++) {
             if (fromList.get(i).equals(myType)) return toList.get(i);
         }

@@ -5,7 +5,7 @@ body, .message, .form, form {
      justify-content: center;
      align-items: center;
      flex-direction: column;
- }
+}
 
 body {
     background-image: url("db-background.jpg");
@@ -97,7 +97,6 @@ form input:focus {
     border-bottom: 1px solid rgba(128, 155, 206, 0.7);
     transition: 0.6s all ease;
 }
-
 
 .button {
      width: 100%;

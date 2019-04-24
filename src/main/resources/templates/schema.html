@@ -1,0 +1,66 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Database schema</title>
+    <link rel="stylesheet" href="css/schema.css" type="text/css"/>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/schema.js"></script>
+    <script type="text/javascript">
+        var vt;
+        window.onload = function () {
+            var container = document.getElementById("container");
+            var msg = document.getElementById("msg");
+            vt = new VTree(container);
+            var reader = new VTree.reader.Object();
+
+            function updateTree() {
+                var s = document.getElementById("from-text").value;
+                msg.innerHTML = '';
+                try {
+                    var jsonData = JSON.parse(s);
+                } catch (e) {
+                    msg.innerHTML = 'JSON parse error: ' + e.message;
+                }
+                var data = reader.read(jsonData);
+                vt.data(data)
+                    .update();
+            }
+            function createSvgString() {
+                document.getElementById("svg-text").value = vt.createSvgString();
+            }
+            document.getElementById("go-button").onclick = updateTree;
+            document.getElementById("svg-button").onclick = createSvgString;
+            updateTree();
+        };
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1 class="textStyle">Database schema diagram</h1>
+    <form autocomplete="off" method="get" action="/migration">
+        <div>
+            <button class="button">Migrate</button>
+        </div>
+    </form>
+    <div>
+        <label for="from-text" class="textStyle">Schema's JSON</label><br/>
+        <textarea id="from-text" rows="6" cols="80" th:text="${schema}"></textarea>
+    </div>
+    <div>
+        <input id="go-button" class="button" type="button" value="Visualize"/>
+    </div>
+    <div id="msg" style="color: red;"></div>
+    <div id="container"></div>
+    <div>
+        <input id="svg-button" class="button" type="button" value="Get SVG String"/>
+    </div>
+    <div>
+        <p class="textStyle">If you want to export the diagram as a svg file, copy the following text into a text editor
+            and save the file
+            with a .svg extension.</p>
+        <textarea id="svg-text" rows="6" cols="80"></textarea>
+    </div>
+</div>
+</body>
+</html>

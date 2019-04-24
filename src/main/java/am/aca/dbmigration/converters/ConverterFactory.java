@@ -15,7 +15,6 @@ public class ConverterFactory {
 
         String from = JdbcUrlHelper.getDbType(urlFrom);
         String to = JdbcUrlHelper.getDbType(urlTo);
-
         switch (from) {
             case "postgresql": {
                 switch (to) {
@@ -25,7 +24,6 @@ public class ConverterFactory {
                         throw new UnsupportedOperationException("Unsupported RDBMS");
                 }
             }
-
             case "mysql": {
                 switch (to) {
                     case "postgresql":
@@ -34,7 +32,6 @@ public class ConverterFactory {
                         throw new UnsupportedOperationException("Unsupported RDBMS");
                 }
             }
-
             default:
                 throw new UnsupportedOperationException("Unsupported RDBMS");
         }

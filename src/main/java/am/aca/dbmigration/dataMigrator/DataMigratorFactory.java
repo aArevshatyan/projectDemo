@@ -4,9 +4,7 @@ import am.aca.dbmigration.sql.tables.MySQLTable;
 import am.aca.dbmigration.sql.tables.PostgreSQLTable;
 import am.aca.dbmigration.sql.utils.JdbcUrlHelper;
 
-
 public class DataMigratorFactory {
-
     /**
      * Defines DataMigrator type by destination url
      *
@@ -17,7 +15,6 @@ public class DataMigratorFactory {
      * @return
      */
     public static DataMigrator getDataMigrator(String urlFrom, String urlTo, String usernameFrom, String passwordFrom) {
-
         String dbFrom = JdbcUrlHelper.getDbType(urlFrom);
         String dbTo = JdbcUrlHelper.getDbType(urlTo);
         switch (dbFrom) {
@@ -29,7 +26,6 @@ public class DataMigratorFactory {
                         throw new UnsupportedOperationException("Unsupported RDBMS");
                 }
             }
-
             case "mysql": {
                 switch (dbTo) {
                     case "postgresql":
@@ -38,10 +34,8 @@ public class DataMigratorFactory {
                         throw new UnsupportedOperationException("Unsupported RDBMS");
                 }
             }
-
             default:
                 throw new UnsupportedOperationException("Unsupported RDBMS");
         }
     }
-
 }

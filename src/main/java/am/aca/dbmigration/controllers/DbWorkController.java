@@ -3,6 +3,7 @@ package am.aca.dbmigration.controllers;
 import am.aca.dbmigration.sql.MigrationData;
 import am.aca.dbmigration.sql.SchemaAnalyzer;
 import am.aca.dbmigration.sql.tables.Table;
+import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,44 +27,44 @@ import java.util.List;
 @SessionScope
 public class DbWorkController {
 
-
     @GetMapping("/")
     public ModelAndView homePage() {
         return new ModelAndView("index");
     }
 
-
     @PostMapping("/")
     public ModelAndView urlToInput(HttpServletRequest httpServletRequest) {
-
         MigrationData.urlFrom = httpServletRequest.getParameter("urlFrom");
         MigrationData.usernameFrom = httpServletRequest.getParameter("usernameFrom");
         MigrationData.passwordFrom = httpServletRequest.getParameter("passwordFrom");
-
-
-
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("testMsg", "Please input correct database info");
-
         return (testConnection("from")) ? new ModelAndView("redirect:/schema") : modelAndView;
     }
 
     @GetMapping("/schema")
-    public ModelAndView showTables() throws SQLException {
-        ModelAndView modelAndView = new ModelAndView("view");
-        modelAndView.addObject("sessionId", RequestContextHolder.currentRequestAttributes().getSessionId());
-        List<? extends Table> tables = SchemaAnalyzer.getSchema(MigrationData.urlFrom, MigrationData.usernameFrom, MigrationData.passwordFrom);
-        modelAndView.addObject("tables", tables);
+    public ModelAndView showSchema() throws SQLException {
+        ModelAndView modelAndView = new ModelAndView("schema");
+        SchemaAnalyzer.getSchema(MigrationData.urlFrom, MigrationData.usernameFrom, MigrationData.passwordFrom);
+        Gson gson = new Gson();
+        modelAndView.addObject("schema", gson.toJson(MigrationData.schemaFrom));
         return modelAndView;
     }
 
+    @GetMapping("/migration")
+    public ModelAndView showTables() throws SQLException {
+        ModelAndView modelAndView = new ModelAndView("view");
+        modelAndView.addObject("sessionId", RequestContextHolder.currentRequestAttributes().getSessionId());
+        List<? extends Table> tables = MigrationData.schemaFrom.getTables();
+        modelAndView.addObject("tables", tables);
+        return modelAndView;
+    }
 
     @PostMapping("/prepare")
     public ResponseEntity<?> prepareSqls(HttpServletRequest httpServletRequest) {
         MigrationData.urlTo = httpServletRequest.getParameter("urlTo");
         MigrationData.usernameTo = httpServletRequest.getParameter("usernameTo");
         MigrationData.passwordTo = httpServletRequest.getParameter("passwordTo");
-
         if (testConnection("to")) {
             String checkedTables = httpServletRequest.getParameter("checkedTables");
             SchemaAnalyzer.setEnabled(checkedTables);
@@ -72,7 +73,6 @@ public class DbWorkController {
             return new ResponseEntity<>("invalid data", HttpStatus.BAD_REQUEST);
         }
     }
-
 
     private boolean testConnection(String s) {
         switch (s) {

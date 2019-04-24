@@ -14,7 +14,6 @@ import java.util.List;
  * @param <T> destination database type
  */
 public class DataMigrator<T> {
-
     private String urlFrom;
     private String usernameFrom;
     private String passwordFrom;
@@ -33,16 +32,13 @@ public class DataMigrator<T> {
      * @param schemaFrom is generated schema of source database
      */
     public void generateMigrationSQL(Schema<Table> schemaFrom) {
-
         schemaFrom
                 .getTables()
                 .stream()
                 .filter(Table::isEnabled)
                 .forEach(table -> {
-
                             dataList = new ArrayList<>();
                             int columnCount = table.getColumns().size();
-
                             String sqlSelect = "SELECT * from " + table.getName();
                             try {
                                 Connection connectionFrom = DriverManager.getConnection(
@@ -50,13 +46,9 @@ public class DataMigrator<T> {
                                         usernameFrom,
                                         passwordFrom
                                 );
-                                PreparedStatement preparedStatement = connectionFrom.prepareStatement(
-                                        sqlSelect
-                                );
+                                PreparedStatement preparedStatement = connectionFrom.prepareStatement(sqlSelect);
                                 preparedStatement.setFetchSize(50);
                                 ResultSet resultSet = preparedStatement.executeQuery();
-
-
                                 while (resultSet.next()) {
                                     List<String> values = new ArrayList<>();
                                     for (int i = 1; i <= columnCount; i++) {
@@ -67,7 +59,6 @@ public class DataMigrator<T> {
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
-
                             dataList
                                     .forEach(
                                             list -> {
@@ -76,23 +67,16 @@ public class DataMigrator<T> {
                                                 sql.append(table.getName());
                                                 sql.append(" VALUES ( ");
                                                 for (String aList : list) {
-
                                                     sql.append("\'");
                                                     sql.append(aList);
                                                     sql.append("\' , ");
                                                 }
                                                 sql.replace(sql.toString().lastIndexOf(","), sql.toString().lastIndexOf(",") + 1, "");
-
                                                 sql.append(");");
-
                                                 GeneratedInsertSQLs.add(sql.toString());
-
                                             }
                                     );
-
-
                         }
                 );
-
     }
 }

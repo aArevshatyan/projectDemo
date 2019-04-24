@@ -16,20 +16,17 @@ import java.util.List;
 /**
  * Web socket config for dynamic messaging during server work
  */
-
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-
         registry.enableSimpleBroker("/message");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-
         registry.addEndpoint("/ws").withSockJS();
     }
 
@@ -57,6 +54,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public boolean configureMessageConverters(List<MessageConverter> list) {
         return false;
     }
-
-
 }

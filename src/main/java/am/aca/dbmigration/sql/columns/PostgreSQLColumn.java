@@ -7,7 +7,6 @@ import am.aca.dbmigration.sql.utils.Nullable;
  */
 public class PostgreSQLColumn {
 
-
     private String name;
     private int ordinalPosition;
     private String defaultValue;
@@ -31,9 +30,7 @@ public class PostgreSQLColumn {
         this.characterOctetLength = characterOctetLength;
         this.numericPrecision = numericPrecision;
         this.numericScale = numericScale;
-
         if (numericPrecision != 0 && numericPrecision != 32) dataType = "Numeric";
-
         this.type = dataType +
                 ((characterMaximumLength != 0 && characterMaximumLength != 65535) ?
                         ("(" + (characterMaximumLength) + ")")

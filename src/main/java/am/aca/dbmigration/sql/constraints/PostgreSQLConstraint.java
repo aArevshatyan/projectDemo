@@ -12,7 +12,6 @@ public class PostgreSQLConstraint {
     private String referencedTable;
     private String referencedColumn;
 
-
     public PostgreSQLConstraint(String name, String type, String table, String column, String referencedTable, String referencedColumn) {
         this.name = name;
         this.type = type;

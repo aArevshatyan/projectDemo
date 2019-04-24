@@ -24,6 +24,5 @@ public class GeneratedForeignSQls {
 
     public static void emptyList() {
         foreignSQLs = new ArrayList<>();
-
     }
 }

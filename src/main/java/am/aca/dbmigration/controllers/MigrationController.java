@@ -47,13 +47,9 @@ public class MigrationController {
         GeneratedPrimarySQLs.emptyList();
         GeneratedForeignSQls.emptyList();
         GeneratedInsertSQLs.emptyList();
-
-
-
         for (Table table : MigrationData.schemaFrom.getTables()) {
             table.setEnabled(false);
         }
-
         return ResponseEntity.ok().build();
     }
 
@@ -94,7 +90,6 @@ public class MigrationController {
 
         Statement statement = connection.createStatement();
         Thread.sleep(600);
-
         for (String s : GeneratedCreateSQLs.getCreateSQLs()) {
             System.out.println(s);
             statement.addBatch(s);
@@ -130,9 +125,7 @@ public class MigrationController {
         statement.clearBatch();
         messagingTemplate.convertAndSend("/message/" + sessionId, "Foreign keys set");
         Thread.sleep(600);
-
         messagingTemplate.convertAndSend("/message/" + sessionId, "MIGRATION DONE SUCCESSFULLY");
-
         messagingTemplate.convertAndSend("/message/" + sessionId, "done");
     }
 
@@ -143,8 +136,5 @@ public class MigrationController {
             Thread.sleep(800);
         }
         messagingTemplate.convertAndSend("/message/" + sessionId, "done");
-
     }
-
-
 }

@@ -19,7 +19,6 @@ public class MySQLTable implements Table {
     private List<MySQLColumn> columns;
     private List<MySQLConstraint> constraints;
 
-
     public MySQLTable(String name, String type) {
         this.name = name;
         this.type = type;
@@ -37,7 +36,6 @@ public class MySQLTable implements Table {
                 constraintsByPK.add(mySQLConstraint);
             }
         }
-
         return constraintsByPK.stream().distinct().collect(Collectors.toList());
     }
 
@@ -53,7 +51,6 @@ public class MySQLTable implements Table {
         }
         return constraintsByFK;
     }
-
 
     public void addColumn(MySQLColumn column) {
         this.columns.add(column);

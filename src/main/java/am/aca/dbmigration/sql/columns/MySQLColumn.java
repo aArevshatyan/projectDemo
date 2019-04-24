@@ -20,8 +20,7 @@ public class MySQLColumn {
 
     public MySQLColumn(String name, int ordinalPosition, String defaultValue,
                        Nullable isNullable, String dataType, int characterMaximumLength,
-                       int characterOctetLength, int numericPrecision, int numericScale
-    ) {
+                       int characterOctetLength, int numericPrecision, int numericScale) {
         this.name = name;
         this.ordinalPosition = ordinalPosition;
         this.defaultValue = defaultValue;
@@ -31,8 +30,6 @@ public class MySQLColumn {
         this.characterOctetLength = characterOctetLength;
         this.numericPrecision = numericPrecision;
         this.numericScale = numericScale;
-
-
         this.type = dataType +
                 ((characterMaximumLength != 0) ? (
                         "(" + (characterMaximumLength) + ")"
@@ -44,7 +41,6 @@ public class MySQLColumn {
                                         : ")"))
                         : "")
         ;
-
     }
 
     public String getName() {
@@ -127,7 +123,6 @@ public class MySQLColumn {
     public void setType(String type) {
         this.type = type;
     }
-
 
     @Override
     public String toString() {

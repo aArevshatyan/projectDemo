@@ -7,7 +7,6 @@ import am.aca.dbmigration.sql.Schema;
  * @param <R> Destination database type
  */
 public interface Converter<T, R> {
-
     /**
      * This function takes already generated schema of
      * source database type and
@@ -17,5 +16,4 @@ public interface Converter<T, R> {
      * @return destination database type schema
      */
     Schema<R> convert(Schema<T> schema);
-
 }

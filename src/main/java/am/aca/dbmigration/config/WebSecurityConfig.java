@@ -10,10 +10,8 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 /**
  * Web security config for extracting session ID
  */
-
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()

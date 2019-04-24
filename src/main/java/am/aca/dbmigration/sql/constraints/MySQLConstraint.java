@@ -14,7 +14,6 @@ public class MySQLConstraint {
     private String referencedTable;
     private String referencedColumn;
 
-
     public MySQLConstraint(String name, String type, String table, String column, String referencedTable, String referencedColumn) {
         this.name = name;
         this.type = type;
@@ -36,7 +35,6 @@ public class MySQLConstraint {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(getType(), getTable(), getColumn());
     }
 

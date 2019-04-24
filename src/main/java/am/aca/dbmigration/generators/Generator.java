@@ -16,5 +16,4 @@ public interface Generator<T> {
      * @throws SQLException
      */
     void generateSQLOf(Schema<T> schema) throws SQLException;
-
 }
